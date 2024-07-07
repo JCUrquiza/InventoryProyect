@@ -10,6 +10,8 @@ export class CompanyRoutes {
         const company = new CompanyController();
 
         router.post('/create', company.createCompany);
+        router.put('/update/:id', company.updateCompany);
+        router.get('/getAll', company.getAllCompanies);
 
         return router;
     }
