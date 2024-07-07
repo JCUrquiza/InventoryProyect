@@ -13,11 +13,82 @@ datasource db {
   url      = env("POSTGRES_URL")
 }
 
-
 model company {
   id      Int    @id @default(autoincrement())
   name    String
   email   String
   address String
+
+  // Relations
+  branchOffices branchOffices[]
 }
+
+model branchOffices {
+  id      Int    @id @default(autoincrement())
+  name    String
+  address String
+  email   String
+  state   String
+
+  company   company @relation(fields: [companyId], references: [id])
+  companyId Int
+
+  // Relations
+  warehousesByBranch warehousesByBranch[]
+}
+
+model wareHouses {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  // Relations
+  warehousesByBranch warehousesByBranch[]
+}
+
+model warehousesByBranch {
+  id Int @id @default(autoincrement())
+
+  branchOffices   branchOffices @relation(fields: [branchOfficesId], references: [id])
+  branchOfficesId Int
+
+  wareHouses   wareHouses @relation(fields: [wareHousesId], references: [id])
+  wareHousesId Int
+
+  // Relations
+  productsInWarehouses productsInWarehouses[]
+}
+
+model productFamily {
+  id Int @id @default(autoincrement())
+  name String
+
+  // Relations
+  products products[]
+
+}
+
+model products {
+  id Int @id @default(autoincrement())
+  name String
+  salePrice Decimal
+
+  productFamily productFamily @relation(fields: [productFamilyId], references: [id])
+  productFamilyId Int
+
+  // Relations
+  productsInWarehouses productsInWarehouses[]
+
+}
+
+model productsInWarehouses {
+  id Int @id @default(autoincrement())
+  quantity Int
+
+  products products @relation(fields: [productsId], references: [id])
+  productsId Int
+
+  warehousesByBranch warehousesByBranch @relation(fields: [warehousesByBranchId], references: [id])
+  warehousesByBranchId Int
+}
+
 
