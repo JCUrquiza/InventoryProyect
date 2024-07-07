@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { CompanyRoutes } from './company/routes';
 import { BranchesOfficesRoutes } from './branchOffices/routes';
+import { WarehouseRoutes } from './wareHouses/routes';
 
 
 export class AppRoutes {
@@ -11,6 +12,7 @@ export class AppRoutes {
 
         router.use('/api/company', CompanyRoutes.routes);
         router.use('/api/branchesOffices', BranchesOfficesRoutes.routes);
+        router.use('/api/warehouse', WarehouseRoutes.routes);
 
         return router;
     }

@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { prisma } from '../../data/postgres';
-import { CreateBranchOfficeDto } from '../../domain';
-import { UpdateBranchOfficeDto } from '../../domain/dtos/branchOffices/update-branchOffice.dto';
+import { CreateBranchOfficeDto, UpdateBranchOfficeDto } from '../../domain';
 
 
 export class BranchesOfficesController {
