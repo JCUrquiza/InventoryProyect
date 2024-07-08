@@ -59,6 +59,27 @@ export class WarehousesController {
 
     }
 
+    public getAll = async(req: Request, res: Response) => {
+
+        const allWarehouses = await prisma.wareHouses.findMany();
+        if ( allWarehouses.length === 0 ) return res.status(400).json({ error: 'There´s nothing to show' });
+        
+        return res.status(200).json({ warehouses: allWarehouses });
+    }
+
+    public deleteOne = async(req: Request, res: Response) => {
+
+        const id = +req.params.id;
+
+        // Buscamos si existe el almacén
+        const warehouseExist = await prisma.wareHouses.findUnique({ where: { id } });
+        if ( !warehouseExist ) return res.status(404).json({ error: 'Warehouse doesn´t exist' });
+
+        const warehousesDeleted = await prisma.wareHouses.delete({ where: {id} });
+        
+        return res.status(200).json({ message: `Warehouses deleted: ${warehousesDeleted.name}` });
+    }
+
 }
 
 

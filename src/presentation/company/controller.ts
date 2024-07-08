@@ -69,7 +69,6 @@ export class CompanyController {
         if ( allCompanies.length == 0) return res.status(400).json({ error: 'There´s nothing to show' });
 
         return res.status(200).json({ company: allCompanies });
-
     }
 
 }

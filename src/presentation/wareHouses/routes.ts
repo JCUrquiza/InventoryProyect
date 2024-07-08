@@ -11,6 +11,8 @@ export class WarehouseRoutes {
 
         router.post('/create', warehouse.createWarehouses);
         router.put('/update/:id', warehouse.updateWarehouse);
+        router.get('/getAll', warehouse.getAll);
+        router.delete('/delete/:id', warehouse.deleteOne);
 
         return router;
     }
