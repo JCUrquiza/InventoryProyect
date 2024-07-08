@@ -12,4 +12,8 @@ export * from './dtos/branchOffices/update-branchOffice.dto';
 export * from './dtos/wareHouses/create-warehouses.dto';
 export * from './dtos/wareHouses/update-warehouses.dto';
 
+// Product Family
+export * from './dtos/productFamily/create-productFamily.dto';
+export * from './dtos/productFamily/update-productFamily.dto';
+
 
