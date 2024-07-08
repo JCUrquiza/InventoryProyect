@@ -16,4 +16,8 @@ export * from './dtos/wareHouses/update-warehouses.dto';
 export * from './dtos/productFamily/create-productFamily.dto';
 export * from './dtos/productFamily/update-productFamily.dto';
 
+// Products
+export * from './dtos/products/create-product.dto';
+export * from './dtos/products/update-product.dto';
+
 

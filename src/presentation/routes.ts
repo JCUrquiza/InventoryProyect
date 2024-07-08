@@ -3,6 +3,7 @@ import { CompanyRoutes } from './company/routes';
 import { BranchesOfficesRoutes } from './branchOffices/routes';
 import { WarehouseRoutes } from './wareHouses/routes';
 import { ProductFamilyRoutes } from './productFamily/routes';
+import { ProductRoutes } from './products/routes';
 
 
 export class AppRoutes {
@@ -15,6 +16,7 @@ export class AppRoutes {
         router.use('/api/branchesOffices', BranchesOfficesRoutes.routes);
         router.use('/api/warehouse', WarehouseRoutes.routes);
         router.use('/api/productFamily', ProductFamilyRoutes.routes);
+        router.use('/api/product', ProductRoutes.routes);
 
         return router;
     }
