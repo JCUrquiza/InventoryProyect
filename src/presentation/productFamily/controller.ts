@@ -66,6 +66,19 @@ export class ProductFamilyController {
         return res.status(200).json({ productFamilies: allProductFamily });
     }
 
+    public deleteOne = async(req: Request, res: Response) => {
+
+        const id = +req.params.id;
+
+        // Buscamos si existe la familia del producto
+        const productFamilyExist = await prisma.productFamily.findUnique({ where: { id } });
+        if ( !productFamilyExist ) return res.status(404).json({ error: 'Product family doesn´t exist' });
+
+        const productFamilyDeleted = await prisma.productFamily.delete({ where: {id} });
+        
+        return res.status(200).json({ message: `Product Family deleted: ${productFamilyDeleted.name}` });
+    }
+
 }
 
 

@@ -12,6 +12,7 @@ export class ProductFamilyRoutes {
         router.post('/create', productFamily.createProductFamily);
         router.put('/update/:id', productFamily.updateProductFamily);
         router.get('/getAll', productFamily.getAll);
+        router.delete('/delete/:id', productFamily.deleteOne);
 
         return router;
     }
