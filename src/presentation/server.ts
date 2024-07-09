@@ -1,5 +1,5 @@
 import express, { Router } from 'express';
-
+import cors from 'cors';
 
 interface Options {
     port: number;
@@ -26,6 +26,13 @@ export class Server {
         this.app.use( express.json() );
         // Permite el formato de data x-form-urlcoded
         this.app.use( express.urlencoded({ extended: true }) );
+        // CORS:
+        this.app.use( cors({
+            origin: 'http://localhost:4200',
+            methods: ['GET', 'PUT', 'POST', 'DELETE'],
+            allowedHeaders: ['Content-Type'],
+            credentials: true
+        }) );
 
         // Routes
         this.app.use( this.routes );
