@@ -10,6 +10,9 @@ export class ProductRoutes {
         const product = new ProductsController();
 
         router.post('/create', product.createProduct);
+        router.put('/update/:id', product.updateProduct);
+        router.get('/getAll', product.getAll);
+        router.delete('/delete/:id', product.deleteOne);
 
         return router;
     }
