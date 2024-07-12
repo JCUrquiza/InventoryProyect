@@ -71,5 +71,26 @@ export class CompanyController {
         return res.status(200).json({ company: allCompanies });
     }
 
+    public deleteCompany = async(req: Request, res: Response) => {
+
+        try {
+            const id = +req.params.id;
+            await prisma.company.delete({
+                where: { id }
+            });
+
+            return res.status(200).json({ message: `Company deleted: id ${ id }` });
+        } catch (error: any) {
+            console.log(error);
+            if ( error.code === 'P2025' ) {
+                return res.status(404).json({ error : error.meta.cause });
+            }
+            return res.status(500).json({ error });
+        }
+
+    }
+
+
+
 }
 

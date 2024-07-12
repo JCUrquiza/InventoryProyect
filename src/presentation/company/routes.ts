@@ -12,6 +12,7 @@ export class CompanyRoutes {
         router.post('/create', company.createCompany);
         router.put('/update/:id', company.updateCompany);
         router.get('/getAll', company.getAllCompanies);
+        router.delete('/delete/:id', company.deleteCompany);
 
         return router;
     }
