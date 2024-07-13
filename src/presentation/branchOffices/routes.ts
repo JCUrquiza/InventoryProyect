@@ -13,6 +13,7 @@ export class BranchesOfficesRoutes {
         router.put('/update/:id', branchOffices.updateBranchOffice);
         router.get('/getAll', branchOffices.getAllBranchesSources);
         router.delete('/deleteAll', branchOffices.deleteBranchOffice);
+        router.delete('/delete/:id', branchOffices.deleteOneBranchOffice);
 
         return router;
     }

@@ -96,4 +96,25 @@ export class BranchesOfficesController {
 
     }
 
+    public deleteOneBranchOffice = async(req: Request, res: Response) => {
+
+        try {
+            const id = +req.params.id;
+            await prisma.branchOffices.delete({
+                where: { id }
+            });
+
+            return res.status(200).json({ message: 'BranchOffice deleted successfully' });
+        } catch (error: any) {
+            console.log(error);
+            if ( error.code === 'P2025' ) {
+                return res.status(404).json({ error: error.meta.cause });
+            }
+            return res.status(500).json({ error });
+        }
+
+    }
+
 }
+
+
