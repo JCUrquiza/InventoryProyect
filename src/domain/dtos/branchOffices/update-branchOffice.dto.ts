@@ -18,7 +18,7 @@ export class UpdateBranchOfficeDto {
         if ( this.address ) returnObj.address = this.address;
         if ( this.email ) returnObj.email = this.email;
         if ( this.state ) returnObj.state = this.state;
-        if ( this.companyId ) returnObj.companyId = this.companyId;
+        // if ( this.companyId ) returnObj.companyId = this.companyId;
 
         return returnObj;
     }
@@ -29,6 +29,8 @@ export class UpdateBranchOfficeDto {
         if ( !id || isNaN( Number(id) ) ) {
             return ['Id must be a valid number..', undefined];
         }
+        
+        if ( !companyId ) return ['Company is required', undefined];
 
         return [undefined, new UpdateBranchOfficeDto(id, name, address, email, state, companyId)];
     }
