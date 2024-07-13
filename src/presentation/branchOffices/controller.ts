@@ -72,7 +72,9 @@ export class BranchesOfficesController {
 
     public getAllBranchesSources = async(req: Request, res: Response) => {
 
-        const allBranchesOffices = await prisma.branchOffices.findMany();
+        const allBranchesOffices = await prisma.branchOffices.findMany({
+            include: { company: true }
+        });
         if ( allBranchesOffices.length == 0) return res.status(400).json({ error: 'there´s nothing to show' });
 
         return res.status(200).json({ branchesOffices: allBranchesOffices });

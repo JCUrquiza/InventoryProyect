@@ -85,6 +85,9 @@ export class CompanyController {
             if ( error.code === 'P2025' ) {
                 return res.status(404).json({ error : error.meta.cause });
             }
+            if ( error.code === 'P2003' ) {
+                return res.status(404).json({ error : 'Cannot be deleted because this item has dependencies' });
+            }
             return res.status(500).json({ error });
         }
 

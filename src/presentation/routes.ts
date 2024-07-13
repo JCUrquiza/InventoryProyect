@@ -12,11 +12,11 @@ export class AppRoutes {
 
         const router = Router();
 
-        router.use('/api/company', CompanyRoutes.routes);
-        router.use('/api/branchesOffices', BranchesOfficesRoutes.routes);
-        router.use('/api/warehouse', WarehouseRoutes.routes);
-        router.use('/api/productFamily', ProductFamilyRoutes.routes);
-        router.use('/api/product', ProductRoutes.routes);
+        router.use('/api/v1/company', CompanyRoutes.routes);
+        router.use('/api/v1/branchesOffices', BranchesOfficesRoutes.routes);
+        router.use('/api/v1/warehouse', WarehouseRoutes.routes);
+        router.use('/api/v1/productFamily', ProductFamilyRoutes.routes);
+        router.use('/api/v1/product', ProductRoutes.routes);
 
         return router;
     }
