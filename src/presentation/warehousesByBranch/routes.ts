@@ -11,6 +11,7 @@ export class WarehousesByBranchRoutes {
         const warehousesByBranch = new WarehousesByBranchController();
 
         router.post('/create-association', warehousesByBranch.createAssociation);
+        router.get('/getAll', warehousesByBranch.getAllAssociations);
 
         return router;
     }
