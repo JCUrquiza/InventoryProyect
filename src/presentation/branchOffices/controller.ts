@@ -22,15 +22,30 @@ export class BranchesOfficesController {
             });
             if ( !company ) return res.status(404).json({ error: 'Company not found, maybe doesn´t exist' });
 
+            // Verificamos que la sucursal a guardar no exista ya
             const branchOfficeExist = await prisma.branchOffices.findFirst({
                 where: {
                     name: createBranchOfficeDto!.name
                 }
             });
             if ( branchOfficeExist ) return res.status(400).json({ error: 'Branch office already exist' });
-
+            
+            // Creamos la sucursal
             const newBranchOffice = await prisma.branchOffices.create({
                 data: createBranchOfficeDto!
+            });
+
+            // Buscamos todos los almacenes
+            const allWarehouses = await prisma.wareHouses.findMany();
+
+            // Crear una entrada en warehousesByBranch para cada almacén
+            const warehousesByBranchData = allWarehouses.map(warehouse => ({
+                branchOfficesId: newBranchOffice.id,
+                wareHousesId: warehouse.id
+            }));
+
+            await prisma.warehousesByBranch.createMany({
+                data: warehousesByBranchData
             });
             
             return res.status(201).json({ branchOffice: newBranchOffice });
@@ -109,6 +124,9 @@ export class BranchesOfficesController {
             console.log(error);
             if ( error.code === 'P2025' ) {
                 return res.status(404).json({ error: error.meta.cause });
+            }
+            if ( error.code === 'P2003' ) {
+                return res.status(404).json({ error: 'Cannot be deleted because the branch has dependencies' });
             }
             return res.status(500).json({ error });
         }

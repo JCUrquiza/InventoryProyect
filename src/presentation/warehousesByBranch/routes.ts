@@ -14,6 +14,8 @@ export class WarehousesByBranchRoutes {
         router.get('/getAll', warehousesByBranch.getAllAssociations);
         router.get('/getByBranch/:id', warehousesByBranch.getWarehousesByBranch);
 
+        router.delete('/deleteAssociation/:id', warehousesByBranch.deleteAssociationWarehousesByBranch);
+
         return router;
     }
 

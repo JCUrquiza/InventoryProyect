@@ -112,6 +112,47 @@ export class WarehousesByBranchController {
     }
 
 
+    public update = () => {}
+
+
+    public deleteAssociationWarehousesByBranch = async(req: Request, res: Response) => {
+
+        try {
+            
+            const id = +req.params.id
+
+            // Buscamos si existe la sucursal
+            const branchOffice = await prisma.branchOffices.findUnique({
+                where: {
+                    id
+                }
+            });
+            if ( !branchOffice ) return res.status(404).json({ error: 'That branchoffice doesn´t exist' });
+
+            // Buscamos que exista esa asociación
+            const warehousesByBranchOffice = await prisma.warehousesByBranch.findFirst({
+                where: {
+                    branchOfficesId: branchOffice.id
+                }
+            });
+            if ( !warehousesByBranchOffice ) return res.status(404).json({ error: 'That branchoffice doesn´t have warehouses' });
+
+            // Eliminamos...
+            await prisma.warehousesByBranch.deleteMany({
+                where: {
+                    branchOfficesId: branchOffice.id
+                }
+            });
+
+            return res.status(200).json({ message: 'Records deleted successfully' });
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ error });
+        }
+
+    }
+
+
 }
 
 
