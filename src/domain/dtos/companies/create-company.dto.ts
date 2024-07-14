@@ -16,7 +16,11 @@ export class CreateCompanyDto {
         if ( !email ) return ['Email of company is necesary', undefined];
         if ( !address ) return ['Address of company is necesary', undefined];
 
-        return [undefined, new CreateCompanyDto(name, email, address)];
+        // Capitalizar y recortar el nombre
+        const nameTrimmed = name.trim();
+        const nameCapitalized = nameTrimmed.charAt(0).toUpperCase() + nameTrimmed.slice(1).toLowerCase();
+
+        return [undefined, new CreateCompanyDto(nameCapitalized, email, address)];
     }
 
 }

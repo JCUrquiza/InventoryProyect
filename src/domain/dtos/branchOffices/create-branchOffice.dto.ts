@@ -21,7 +21,14 @@ export class CreateBranchOfficeDto {
 
         const idCompany = +companyId;
 
-        return [undefined, new CreateBranchOfficeDto(name, address, email, state, idCompany)];
+        // Capitalizar y recortar el nombre
+        const nameTrimmed = name.trim();
+        const nameCapitalized = nameTrimmed.charAt(0).toUpperCase() + nameTrimmed.slice(1).toLowerCase();
+        // Capitalizar y recortar el estado
+        const stateTrimmed = state.trim();
+        const stateCapitalized = stateTrimmed.charAt(0).toUpperCase() + stateTrimmed.slice(1).toLowerCase();
+
+        return [undefined, new CreateBranchOfficeDto(nameCapitalized, address, email, stateCapitalized, idCompany)];
     }
 
 }

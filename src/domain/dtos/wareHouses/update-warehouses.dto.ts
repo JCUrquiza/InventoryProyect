@@ -21,7 +21,11 @@ export class UpdateWarehousesDto {
             return ['Id must be a valid number..', undefined];
         }
 
-        return [undefined, new UpdateWarehousesDto(id, name)];
+        // Capitalizar y recortar el nombre
+        const nameTrimmed = name.trim();
+        const nameCapitalized = nameTrimmed.charAt(0).toUpperCase() + nameTrimmed.slice(1).toLowerCase();
+
+        return [undefined, new UpdateWarehousesDto(id, nameCapitalized)];
     }
 
 }

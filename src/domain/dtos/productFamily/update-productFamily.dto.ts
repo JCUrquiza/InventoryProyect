@@ -20,8 +20,12 @@ export class UpdateProductFamilyDto {
         if ( !id || isNaN( Number(id) ) ) {
             return ['Id must be a valid number..', undefined];
         }
+        
+        // Capitalizar y recortar el nombre
+        const nameTrimmed = name.trim();
+        const nameCapitalized = nameTrimmed.charAt(0).toUpperCase() + nameTrimmed.slice(1).toLowerCase();
 
-        return [undefined, new UpdateProductFamilyDto(id, name)];
+        return [undefined, new UpdateProductFamilyDto(id, nameCapitalized)];
     }
 
 }

@@ -25,7 +25,11 @@ export class UpdateProductDto {
             return ['Id must be a valid number..', undefined];
         }
 
-        return [undefined, new UpdateProductDto(id, name, salePrice, productFamilyId)];
+        // Capitalizar y recortar el nombre
+        const nameTrimmed = name.trim();
+        const nameCapitalized = nameTrimmed.charAt(0).toUpperCase() + nameTrimmed.slice(1).toLowerCase();
+
+        return [undefined, new UpdateProductDto(id, nameCapitalized, salePrice, productFamilyId)];
     }
 
 }

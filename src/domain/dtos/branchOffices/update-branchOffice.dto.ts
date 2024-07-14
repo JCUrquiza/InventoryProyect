@@ -32,7 +32,14 @@ export class UpdateBranchOfficeDto {
         
         if ( !companyId ) return ['Company is required', undefined];
 
-        return [undefined, new UpdateBranchOfficeDto(id, name, address, email, state, companyId)];
+        // Capitalizar y recortar el nombre
+        const nameTrimmed = name.trim();
+        const nameCapitalized = nameTrimmed.charAt(0).toUpperCase() + nameTrimmed.slice(1).toLowerCase();
+        // Capitalizar y recortar el estado
+        const stateTrimmed = state.trim();
+        const stateCapitalized = stateTrimmed.charAt(0).toUpperCase() + stateTrimmed.slice(1).toLowerCase();
+
+        return [undefined, new UpdateBranchOfficeDto(id, nameCapitalized, address, email, stateCapitalized, companyId)];
     }
 
 }

@@ -12,7 +12,11 @@ export class CreateProductFamilyDto {
         
         if ( !name ) return ['Name is required', undefined];
 
-        return [undefined, new CreateProductFamilyDto(name)];
+        // Capitalizar y recortar el nombre
+        const nameTrimmed = name.trim();
+        const nameCapitalized = nameTrimmed.charAt(0).toUpperCase() + nameTrimmed.slice(1).toLowerCase();
+
+        return [undefined, new CreateProductFamilyDto(nameCapitalized)];
     }
 
 }

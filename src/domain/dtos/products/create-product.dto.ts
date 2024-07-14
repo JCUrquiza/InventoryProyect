@@ -17,7 +17,11 @@ export class CreateProductDto {
 
         const idProductFamily = +productFamilyId;
 
-        return [undefined, new CreateProductDto(name, salePrice, idProductFamily)];
+        // Capitalizar y recortar el nombre
+        const nameTrimmed = name.trim();
+        const nameCapitalized = nameTrimmed.charAt(0).toUpperCase() + nameTrimmed.slice(1).toLowerCase();
+
+        return [undefined, new CreateProductDto(nameCapitalized, salePrice, idProductFamily)];
     }
 
 }
