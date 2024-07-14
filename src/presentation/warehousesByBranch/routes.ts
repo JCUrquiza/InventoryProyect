@@ -12,6 +12,7 @@ export class WarehousesByBranchRoutes {
 
         router.post('/create-association', warehousesByBranch.createAssociation);
         router.get('/getAll', warehousesByBranch.getAllAssociations);
+        router.get('/getByBranch/:id', warehousesByBranch.getWarehousesByBranch);
 
         return router;
     }

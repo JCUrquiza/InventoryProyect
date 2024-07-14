@@ -6,6 +6,7 @@ export class WarehousesByBranchController {
 
     constructor() {}
 
+
     public createAssociation = async(req: Request, res: Response) => {
 
         try {
@@ -71,6 +72,45 @@ export class WarehousesByBranchController {
         }
 
     }
+
+
+    public getWarehousesByBranch = async(req: Request, res: Response) => {
+
+        try {
+            const id = +req.params.id;
+
+            // Buscamos la sucursal
+            const branch = await prisma.branchOffices.findUnique({
+                where: {
+                    id: id
+                }
+            });
+            if ( !branch ) return res.status(404).json({ error: 'BranchOffice doesn´t exists' });
+
+            const warehousesByBranch = await prisma.warehousesByBranch.findMany({
+                where: {
+                    branchOfficesId: branch.id
+                },
+                include: {
+                    branchOffices: true,
+                    wareHouses: true
+                }
+            });
+            if ( warehousesByBranch.length === 0 ) return res.status(400).json({ error: 'This branch does´not have warehouses' });
+
+            const respuesta = warehousesByBranch.map( association => ({
+                branchOffice: association.branchOffices,
+                warehouse: association.wareHouses
+            }));
+
+            return res.status(200).json({ warehouses: respuesta });
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ error });
+        }
+
+    }
+
 
 }
 
