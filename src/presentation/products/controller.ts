@@ -46,6 +46,14 @@ export class ProductsController {
             });
             if ( !productExist ) return res.status(400).json({ error: 'Product doens´t exist' });
 
+            // Verificar que el producto a modificar no esté en la base
+            const productBase = await prisma.products.findFirst({
+                where: {
+                    name: updateProductDto!.name
+                }
+            });
+            if ( productBase ) return res.status(400).json({ error: 'Product already exist' });
+
             const productUpdated = await prisma.products.update({
                 where: { id: updateProductDto!.id },
                 data: updateProductDto!.values
@@ -60,10 +68,21 @@ export class ProductsController {
     }
 
     public getAll = async(req: Request, res: Response) => {
-        const allProducts = await prisma.products.findMany();
+        const allProducts = await prisma.products.findMany({
+            include: {
+                productFamily: true
+            }
+        });
         if ( allProducts.length == 0) return res.status(400).json({ error: 'There´s nothing to show' });
 
-        return res.status(200).json({ allProducts });
+        const response = allProducts.map( product => ({
+            id: product.id,
+            name: product.name,
+            salePrice: product.salePrice,
+            productFamily: product.productFamily
+        }));
+
+        return res.status(200).json({ allProducts: response });
     }
 
     public deleteOne = async(req: Request, res: Response) => {
