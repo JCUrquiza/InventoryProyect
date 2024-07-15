@@ -35,7 +35,6 @@ export class ProductInWarehousesController {
             });
             if ( !productExist ) return res.status(404).json({ error: 'Product doesn´t exists' });
 
-
             const warehouseByBranchExist = await prisma.warehousesByBranch.findFirst({
                 where: {
                     branchOfficesId: dto!.branchOfficeId,
@@ -43,6 +42,15 @@ export class ProductInWarehousesController {
                 }
             });
             if ( !warehouseByBranchExist ) return res.status(404).json({ error: 'warehouse doesn´t exist in that branchOffice' });
+
+            // Evitar duplicados
+            const productsExistInWarehouseInBranch = await prisma.productsInWarehouses.findFirst({
+                where: {
+                    warehousesByBranchId: +warehouseByBranchExist.id,
+                    productsId: dto!.productId,
+                }
+            });
+            if ( productsExistInWarehouseInBranch ) return res.status(400).json({ error: 'Product already exist in that warehouse' });
 
             const productsInWarehouseInBranch = await prisma.productsInWarehouses.create({
                 data: {
@@ -52,7 +60,6 @@ export class ProductInWarehousesController {
                 }
             });
 
-            // Evitar duplicados
 
             return res.status(201).json({ productsInWarehouseInBranch });
         } catch (error) {
@@ -200,6 +207,33 @@ export class ProductInWarehousesController {
             }));
 
             return res.status(200).json({ productsInWarehouse: response });
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ error });
+        }
+
+    }
+
+
+    public deleteProductInWarehouse = async(req: Request, res: Response) => {
+
+        try {
+
+            const id = +req.params.id;
+
+            const productInWarehouseExist = await prisma.productsInWarehouses.findUnique({
+                where: {
+                    id
+                }
+            });
+            if ( !productInWarehouseExist ) return res.status(404).json({ error: 'Product not found' });
+
+            await prisma.productsInWarehouses.delete({
+                where: { id }
+            });
+            
+            return res.status(200).json({ message: 'Product deleted successfully' });
+
         } catch (error) {
             console.log(error);
             return res.status(500).json({ error });
