@@ -59,8 +59,10 @@ export class WarehousesByBranchController {
                     wareHouses: true
                 }
             });
+            if ( allAssociations.length === 0 ) return res.status(404).json({ error: 'There are no results to show' });
 
             const respuesta = allAssociations.map( association => ({
+                id: association.id,
                 branchOffice: association.branchOffices,
                 warehouse: association.wareHouses
             }));

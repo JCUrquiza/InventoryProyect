@@ -20,8 +20,21 @@ export class WarehousesController {
             });
             if ( wareHouseExist ) return res.status(400).json({ error: 'Warehouse already exist' });
 
+            // Creamos el almacén
             const newWarehouse = await prisma.wareHouses.create({
                 data: createWarehousesDto!
+            });
+
+            // Buscamos todas las sucursales
+            const allBranches = await prisma.branchOffices.findMany();
+
+            // Creamos un registro en warehousesByBranch para cada almacén
+            const warehousesByBranch = allBranches.map( branch => ({
+                branchOfficesId: branch.id,
+                wareHousesId: newWarehouse.id
+            }));
+            await prisma.warehousesByBranch.createMany({
+                data: warehousesByBranch
             });
 
             return res.status(201).json({ warehouse: newWarehouse });
@@ -69,15 +82,26 @@ export class WarehousesController {
 
     public deleteOne = async(req: Request, res: Response) => {
 
-        const id = +req.params.id;
+        try {
 
-        // Buscamos si existe el almacén
-        const warehouseExist = await prisma.wareHouses.findUnique({ where: { id } });
-        if ( !warehouseExist ) return res.status(404).json({ error: 'Warehouse doesn´t exist' });
+            const id = +req.params.id;
+    
+            // Buscamos si existe el almacén
+            const warehouseExist = await prisma.wareHouses.findUnique({ where: { id } });
+            if ( !warehouseExist ) return res.status(404).json({ error: 'Warehouse doesn´t exist' });
+    
+            const warehousesDeleted = await prisma.wareHouses.delete({ where: {id} });
+            
+            return res.status(200).json({ message: `Warehouses deleted: ${warehousesDeleted.name}` });
+            
+        } catch (error: any) {
+            console.log(error);
+            if ( error.code == 'P2003' ) {
+                return res.status(500).json({ error: 'Cannot be deleted because it has dependencies' });
+            }
+            return res.status(500).json({ error });
+        }
 
-        const warehousesDeleted = await prisma.wareHouses.delete({ where: {id} });
-        
-        return res.status(200).json({ message: `Warehouses deleted: ${warehousesDeleted.name}` });
     }
 
 }

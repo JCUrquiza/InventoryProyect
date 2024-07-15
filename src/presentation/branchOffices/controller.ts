@@ -43,7 +43,6 @@ export class BranchesOfficesController {
                 branchOfficesId: newBranchOffice.id,
                 wareHousesId: warehouse.id
             }));
-
             await prisma.warehousesByBranch.createMany({
                 data: warehousesByBranchData
             });
