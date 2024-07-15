@@ -5,6 +5,7 @@ import { WarehouseRoutes } from './wareHouses/routes';
 import { ProductFamilyRoutes } from './productFamily/routes';
 import { ProductRoutes } from './products/routes';
 import { WarehousesByBranchRoutes } from './warehousesByBranch/routes';
+import { ProductsInWarehousesRoutes } from './productsInWarehouses/routes';
 
 
 export class AppRoutes {
@@ -19,6 +20,7 @@ export class AppRoutes {
         router.use('/api/v1/productFamily', ProductFamilyRoutes.routes);
         router.use('/api/v1/product', ProductRoutes.routes);
         router.use('/api/v1/warehousesByBranch', WarehousesByBranchRoutes.routes);
+        router.use('/api/v1/productsInWarehouses', ProductsInWarehousesRoutes.routes);
 
         return router;
     }
