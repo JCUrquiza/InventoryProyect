@@ -25,4 +25,7 @@ export * from './dtos/productsInWarehouses/create-productsInWarehouses.dto';
 export * from './dtos/productsInWarehouses/update-productsInWarehouses.dto';
 export * from './dtos/productsInWarehouses/read-productsInWarehouses.dto';
 
+// Warehouses by branch
+export * from './dtos/warehousesByBranch/delete-warehousesByBranch.dto';
+
 

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { prisma } from '../../data/postgres';
+import { DeleteWarehousesByBranchDto } from '../../domain';
 
 
 export class WarehousesByBranchController {
@@ -120,35 +121,60 @@ export class WarehousesByBranchController {
     public deleteAssociationWarehousesByBranch = async(req: Request, res: Response) => {
 
         try {
+
+            const [error, deleteWarehousesByBranchDto] = DeleteWarehousesByBranchDto.create(req.body);
+            if ( error ) return res.status(400).json({ error });
+
+            // Buscamos la sucursal, el almacén y la relación:
+            if ( !!deleteWarehousesByBranchDto?.idWarehouseByBranch ) {
+                await prisma.warehousesByBranch.delete({
+                    where: {
+                        id: deleteWarehousesByBranchDto.idWarehouseByBranch
+                    }
+                });
+
+                return res.status(200).json({ message: 'warehouseByBranch was deleted' });
+            }
+            if ( !!deleteWarehousesByBranchDto?.idWarehouse ) {
+                // Buscamos el almacén y luego eliminamos
+                const warehouseExist = await prisma.wareHouses.findUnique({
+                    where: {
+                        id: deleteWarehousesByBranchDto.idWarehouse
+                    }
+                });
+                if ( !warehouseExist ) return res.status(404).json({ error: 'warehouse doesn´t exist' });
+
+                await prisma.warehousesByBranch.deleteMany({
+                    where: {
+                        wareHousesId: deleteWarehousesByBranchDto.idWarehouse
+                    }
+                });
+
+                return res.status(200).json({ message: 'warehousesByBranch were deleted' });
+            }
+            if ( !!deleteWarehousesByBranchDto?.idBranchOffice ) {
+                // Buscamos la sucursal y luego borramos
+                const branchofficeExist = await prisma.branchOffices.findUnique({
+                    where: {
+                        id: deleteWarehousesByBranchDto.idBranchOffice
+                    }
+                });
+                if ( !branchofficeExist ) return res.status(404).json({ message: 'branchoffice doesn´t exist' });
+
+                await prisma.warehousesByBranch.deleteMany({
+                    where: {
+                        branchOfficesId: deleteWarehousesByBranchDto.idBranchOffice
+                    }
+                });
+
+                return res.status(200).json({ message: 'warehousesByBranch were deleted' });
+            }
             
-            const id = +req.params.id
-
-            // Buscamos si existe la sucursal
-            const branchOffice = await prisma.branchOffices.findUnique({
-                where: {
-                    id
-                }
-            });
-            if ( !branchOffice ) return res.status(404).json({ error: 'That branchoffice doesn´t exist' });
-
-            // Buscamos que exista esa asociación
-            const warehousesByBranchOffice = await prisma.warehousesByBranch.findFirst({
-                where: {
-                    branchOfficesId: branchOffice.id
-                }
-            });
-            if ( !warehousesByBranchOffice ) return res.status(404).json({ error: 'That branchoffice doesn´t have warehouses' });
-
-            // Eliminamos...
-            await prisma.warehousesByBranch.deleteMany({
-                where: {
-                    branchOfficesId: branchOffice.id
-                }
-            });
-
-            return res.status(200).json({ message: 'Records deleted successfully' });
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
+            if ( error.code == 'P2025' ) {
+                return res.status(500).json({ error: error.meta.cause });
+            }
             return res.status(500).json({ error });
         }
 
