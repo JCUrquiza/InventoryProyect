@@ -13,6 +13,7 @@ export class ProductsInWarehousesRoutes {
         router.post('/getProductsByWarehouse', productInWarehouse.getProductsByWarehousesAndBranches);
         router.put('/updateQuantity/:id', productInWarehouse.updateQuantityOfProduct);
         router.delete('/delete/:id', productInWarehouse.deleteProductInWarehouse);
+        router.put('/transfer', productInWarehouse.moveProductBetweenWarehouses);
 
         return router;
     }

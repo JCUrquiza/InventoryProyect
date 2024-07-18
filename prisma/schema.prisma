@@ -59,36 +59,35 @@ model warehousesByBranch {
 }
 
 model productFamily {
-  id Int @id @default(autoincrement())
+  id   Int    @id @default(autoincrement())
   name String
 
   // Relations
   products products[]
-
 }
 
 model products {
-  id Int @id @default(autoincrement())
-  name String
+  id        Int     @id @default(autoincrement())
+  name      String
+  codigoSKU String
   salePrice Decimal
 
-  productFamily productFamily @relation(fields: [productFamilyId], references: [id])
+  productFamily   productFamily @relation(fields: [productFamilyId], references: [id])
   productFamilyId Int
 
   // Relations
   productsInWarehouses productsInWarehouses[]
-
 }
 
 model productsInWarehouses {
-  id Int @id @default(autoincrement())
+  id       Int @id @default(autoincrement())
   quantity Int
 
-  products products @relation(fields: [productsId], references: [id])
+  products   products @relation(fields: [productsId], references: [id])
   productsId Int
 
-  warehousesByBranch warehousesByBranch @relation(fields: [warehousesByBranchId], references: [id])
+  warehousesByBranch   warehousesByBranch @relation(fields: [warehousesByBranchId], references: [id])
   warehousesByBranchId Int
+
+  @@unique([warehousesByBranchId, productsId]) // Indice compuesto
 }
-
-

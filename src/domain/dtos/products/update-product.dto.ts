@@ -4,6 +4,7 @@ export class UpdateProductDto {
     constructor(
         public readonly id: number,
         public readonly name?: string,
+        public readonly codigoSKU?: string,
         public readonly salePrice?: number,
         public readonly productFamilyId?: number,
     ) {}
@@ -12,6 +13,7 @@ export class UpdateProductDto {
         const returnObj: {[key: string]: any} = {};
 
         if ( this.name ) returnObj.name = this.name;
+        if ( this.codigoSKU ) returnObj.codigoSKU = this.codigoSKU;
         if ( this.salePrice ) returnObj.salePrice = this.salePrice;
         if ( this.productFamilyId ) returnObj.productFamilyId = this.productFamilyId;
 
@@ -19,7 +21,7 @@ export class UpdateProductDto {
     }
 
     static create( props: {[key: string]: any} ): [string?, UpdateProductDto?] {
-        const { id, name, salePrice, productFamilyId } = props;
+        const { id, name, codigoSKU, salePrice, productFamilyId } = props;
 
         if ( !id || isNaN( Number(id) ) ) {
             return ['Id must be a valid number..', undefined];
@@ -29,7 +31,7 @@ export class UpdateProductDto {
         const nameTrimmed = name.trim();
         const nameCapitalized = nameTrimmed.charAt(0).toUpperCase() + nameTrimmed.slice(1).toLowerCase();
 
-        return [undefined, new UpdateProductDto(id, nameCapitalized, salePrice, productFamilyId)];
+        return [undefined, new UpdateProductDto(id, nameCapitalized, codigoSKU, salePrice, productFamilyId)];
     }
 
 }

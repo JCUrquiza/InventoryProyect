@@ -241,6 +241,155 @@ export class ProductInWarehousesController {
 
     }
 
+
+    public moveProductBetweenWarehouses = async(req: Request, res: Response) => {
+
+        const { branchSourceId, warehouseSourceId, wahouseTargetId, products } = req.body;
+        if ( !branchSourceId || !warehouseSourceId || !wahouseTargetId || !products ) return res.status(400).json({ error: 'Falta info' }); 
+
+        try {
+
+            // Inicia la transacción:
+            await prisma.$transaction(async (prisma) => {
+
+                // Buscamos que la sucursal y los almacenes existan
+                const branchSource = await prisma.branchOffices.findUnique({
+                    where: {
+                        id: branchSourceId
+                    }
+                });
+                if ( !branchSource ) return res.status(404).json({ error: 'Branch office doesn´t exist' });
+                const warehouseSource = await prisma.wareHouses.findUnique({
+                    where: {
+                        id: warehouseSourceId
+                    }
+                });
+                if ( !warehouseSource ) return res.status(404).json({ error: 'Warehouse source doesn´t exist' });
+                const warehouseTarget = await prisma.wareHouses.findUnique({
+                    where: {
+                        id: wahouseTargetId
+                    }
+                });
+                if ( !warehouseTarget ) return res.status(404).json({ error: 'Warehouse source doesn´t exist' });
+
+                const warehouseSourceByBranch = await prisma.warehousesByBranch.findFirst({
+                    where: {
+                        branchOfficesId: branchSource.id,
+                        wareHousesId: warehouseSource.id
+                    }
+                });
+                if ( !warehouseSourceByBranch ) return res.status(404).json({ error: 'warehouse in branch doesn´t exist' });
+                
+                const warehousesTargetByBranch = await prisma.warehousesByBranch.findFirst({
+                    where: {
+                        branchOfficesId: branchSource.id,
+                        wareHousesId: warehouseTarget.id
+                    }
+                });
+                if ( !warehousesTargetByBranch ) return res.status(404).json({ error: 'warehouse in branch doesn´t exist' });
+                
+                for(const product of products) {
+
+                    const productsUpdate = await prisma.products.findUnique({
+                        where: {
+                            id: product.id
+                        }
+                    });
+                    if ( !productsUpdate ) return res.status(404).json({ error: 'Product doesn´t exist' });
+    
+                    const productInWarehouseSource = await prisma.productsInWarehouses.findFirst({
+                        where: {
+                            warehousesByBranchId: warehouseSourceByBranch.id,
+                            productsId: product.id
+                        }
+                    });
+                    if ( !productInWarehouseSource ) return res.status(404).json({ error: 'Product doesn´t exist' });
+    
+                    const productQuantity = productInWarehouseSource.quantity;
+                    if ( productQuantity <= product.quantity ) return res.status(400).json({ error: 'Can´t be zero' });
+    
+                    const newProductQuantityInSource = productQuantity - product.quantity;
+                    
+                    // Cantidad en almacén origen
+                    await prisma.productsInWarehouses.update({
+                        where: {
+                            warehousesByBranchId_productsId: {
+                                warehousesByBranchId: warehouseSourceByBranch.id,
+                                productsId: product.id
+                            }
+                        },
+                        data: {
+                            quantity: newProductQuantityInSource
+                        }
+                    });
+
+                    // Verificar si el producto ya existe en el almacén de destino
+                    const productInWarehouseTarget = await prisma.productsInWarehouses.findFirst({
+                        where: {
+                            warehousesByBranchId: warehousesTargetByBranch.id,
+                            productsId: product.id
+                        }
+                    });
+
+                    if (productInWarehouseTarget) {
+                        // Si el producto ya existe en el almacén de destino, actualizar la cantidad
+                        await prisma.productsInWarehouses.update({
+                            where: {
+                                warehousesByBranchId_productsId: {
+                                    warehousesByBranchId: warehousesTargetByBranch.id,
+                                    productsId: product.id
+                                }
+                            },
+                            data: { quantity: productInWarehouseTarget.quantity + product.quantity }
+                        });
+                    } else {
+                        // Si el producto no existe en el almacén de destino, crear una nueva entrada
+                        await prisma.productsInWarehouses.create({
+                            data: {
+                                warehousesByBranchId: warehousesTargetByBranch.id,
+                                productsId: product.id,
+                                quantity: product.quantity
+                            }
+                        });
+                    }
+    
+                }
+            
+            });       
+
+            return res.status(200).json({ message: 'Transfer products successfully' });
+
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ error });
+        }
+
+    }
+
+
+
+
+
+    public deleteAllDataBase = async(req: Request, res: Response) => {
+
+        try {
+
+            await prisma.productsInWarehouses.deleteMany();
+            await prisma.warehousesByBranch.deleteMany();
+            await prisma.wareHouses.deleteMany();
+            await prisma.products.deleteMany();
+            await prisma.productFamily.deleteMany();
+            await prisma.branchOffices.deleteMany();
+
+            return res.status(200).json({ message: 'All database is empty' })
+            
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ error });
+        }
+
+    }
+
 }
 
 

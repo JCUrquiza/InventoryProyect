@@ -78,6 +78,7 @@ export class ProductsController {
         const response = allProducts.map( product => ({
             id: product.id,
             name: product.name,
+            codigoSKU: product.codigoSKU,
             salePrice: product.salePrice,
             productFamily: product.productFamily
         }));
