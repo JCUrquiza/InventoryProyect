@@ -1,5 +1,8 @@
 
 // DTO´s
+// Auth
+export * from './dtos/auth/register-user.dto';
+
 // companies
 export * from './dtos/companies/create-company.dto';
 export * from './dtos/companies/update-company.dto';
@@ -27,5 +30,9 @@ export * from './dtos/productsInWarehouses/read-productsInWarehouses.dto';
 
 // Warehouses by branch
 export * from './dtos/warehousesByBranch/delete-warehousesByBranch.dto';
+
+
+// Custom Errors
+export * from './errors/custom.error';
 
 

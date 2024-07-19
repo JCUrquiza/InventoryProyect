@@ -6,6 +6,7 @@ import { ProductFamilyRoutes } from './productFamily/routes';
 import { ProductRoutes } from './products/routes';
 import { WarehousesByBranchRoutes } from './warehousesByBranch/routes';
 import { ProductsInWarehousesRoutes } from './productsInWarehouses/routes';
+import { AuthRoutes } from './auth/routes';
 
 
 export class AppRoutes {
@@ -13,6 +14,8 @@ export class AppRoutes {
     static get routes(): Router {
 
         const router = Router();
+
+        router.use('/api/v1/auth', AuthRoutes.routes);
 
         router.use('/api/v1/company', CompanyRoutes.routes);
         router.use('/api/v1/branchesOffices', BranchesOfficesRoutes.routes);
