@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { WarehousesByBranchController } from "./controller";
+import { authMiddleware } from "../../middlewares/authMiddleware";
 
 
 
@@ -14,7 +15,7 @@ export class WarehousesByBranchRoutes {
         router.get('/getAll', warehousesByBranch.getAllAssociations);
         router.get('/getByBranch/:id', warehousesByBranch.getWarehousesByBranch);
 
-        router.delete('/deleteAssociation', warehousesByBranch.deleteAssociationWarehousesByBranch);
+        router.delete('/deleteAssociation', authMiddleware, warehousesByBranch.deleteAssociationWarehousesByBranch);
 
         return router;
     }

@@ -13,7 +13,7 @@ export class BranchesOfficesRoutes {
         router.post('/create', branchOffices.createBranchOffice);
         router.put('/update/:id', branchOffices.updateBranchOffice);
         router.get('/getAll', branchOffices.getAllBranchesSources);
-        router.delete('/deleteAll', branchOffices.deleteBranchOffice);
+        router.delete('/deleteAll', authMiddleware, branchOffices.deleteBranchOffice);
         router.delete('/delete/:id', authMiddleware, branchOffices.deleteOneBranchOffice);
 
         return router;

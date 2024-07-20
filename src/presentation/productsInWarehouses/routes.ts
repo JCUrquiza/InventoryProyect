@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { ProductInWarehousesController } from './controller';
+import { authMiddleware } from '../../middlewares/authMiddleware';
 
 
 export class ProductsInWarehousesRoutes {
@@ -12,7 +13,7 @@ export class ProductsInWarehousesRoutes {
         router.post('/create', productInWarehouse.createProductInWarehouse);
         router.post('/getProductsByWarehouse', productInWarehouse.getProductsByWarehousesAndBranches);
         router.put('/updateQuantity/:id', productInWarehouse.updateQuantityOfProduct);
-        router.delete('/delete/:id', productInWarehouse.deleteProductInWarehouse);
+        router.delete('/delete/:id', authMiddleware, productInWarehouse.deleteProductInWarehouse);
         router.put('/transfer', productInWarehouse.moveProductBetweenWarehouses);
 
         return router;

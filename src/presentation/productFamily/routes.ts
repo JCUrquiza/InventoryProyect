@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { ProductFamilyController } from './controller';
+import { authMiddleware } from '../../middlewares/authMiddleware';
 
 
 export class ProductFamilyRoutes {
@@ -12,7 +13,7 @@ export class ProductFamilyRoutes {
         router.post('/create', productFamily.createProductFamily);
         router.put('/update/:id', productFamily.updateProductFamily);
         router.get('/getAll', productFamily.getAll);
-        router.delete('/delete/:id', productFamily.deleteOne);
+        router.delete('/delete/:id', authMiddleware, productFamily.deleteOne);
 
         return router;
     }

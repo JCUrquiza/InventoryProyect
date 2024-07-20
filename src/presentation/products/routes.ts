@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { ProductsController } from './controller';
+import { authMiddleware } from '../../middlewares/authMiddleware';
 
 
 export class ProductRoutes {
@@ -12,7 +13,7 @@ export class ProductRoutes {
         router.post('/create', product.createProduct);
         router.put('/update/:id', product.updateProduct);
         router.get('/getAll', product.getAll);
-        router.delete('/delete/:id', product.deleteOne);
+        router.delete('/delete/:id', authMiddleware, product.deleteOne);
 
         return router;
     }
