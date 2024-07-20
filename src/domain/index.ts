@@ -1,8 +1,11 @@
-
 // DTO´s
 // Auth
 export * from './dtos/auth/register-user.dto';
 export * from './dtos/auth/login-user.dto';
+
+// Catalogue
+export * from './dtos/catalogue/create-catalogue.dto';
+export * from './dtos/catalogue/update-catalogue.dto';
 
 // companies
 export * from './dtos/companies/create-company.dto';

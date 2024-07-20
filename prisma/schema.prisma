@@ -19,6 +19,9 @@ model users {
   name     String
   email    String @unique
   password String
+
+  // Relations
+  tickets tickets[]
 }
 
 model company {
@@ -98,4 +101,40 @@ model productsInWarehouses {
   warehousesByBranchId Int
 
   @@unique([warehousesByBranchId, productsId]) // Indice compuesto
+}
+
+model estatus {
+  id    Int    @id @default(autoincrement())
+  name  String
+  code  String
+  color String
+
+  // Relations
+  tickets tickets[]
+}
+
+model catalogue {
+  id     Int    @id @default(autoincrement())
+  name   String
+  module String
+
+  // Relations
+  tickets tickets[]
+}
+
+model tickets {
+  id          Int      @id @default(autoincrement())
+  description String
+  date        DateTime
+
+  catalogue   catalogue @relation(fields: [catalogueId], references: [id])
+  catalogueId Int
+
+  estatus   estatus @relation(fields: [estatusId], references: [id])
+  estatusId Int
+
+  users users @relation(fields: [usersId], references: [id])
+  usersId Int
+
+  @@unique([estatusId, catalogueId]) // Indice compuesto
 }

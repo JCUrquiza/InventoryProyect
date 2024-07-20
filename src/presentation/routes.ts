@@ -7,6 +7,7 @@ import { ProductRoutes } from './products/routes';
 import { WarehousesByBranchRoutes } from './warehousesByBranch/routes';
 import { ProductsInWarehousesRoutes } from './productsInWarehouses/routes';
 import { AuthRoutes } from './auth/routes';
+import { CatalogueRoutes } from './catalogue/routes';
 
 
 export class AppRoutes {
@@ -24,6 +25,9 @@ export class AppRoutes {
         router.use('/api/v1/product', ProductRoutes.routes);
         router.use('/api/v1/warehousesByBranch', WarehousesByBranchRoutes.routes);
         router.use('/api/v1/productsInWarehouses', ProductsInWarehousesRoutes.routes);
+
+        router.use('/api/v1/catalogue', CatalogueRoutes.routes);
+        
 
         return router;
     }

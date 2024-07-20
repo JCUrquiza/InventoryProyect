@@ -16,6 +16,8 @@ export class AuthRoutes {
 
         router.get('/validate-email/:token', authController.validateToken);
 
+        router.delete('/deleteAll', authController.deleteUsers);
+
         return router;
     }
 

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { CustomError, LoginUserDto, RegisterUserDto } from '../../domain';
 import { AuthService } from '../services/auth.service';
+import { prisma } from '../../data/postgres';
 
 
 export class AuthController {
@@ -44,6 +45,24 @@ export class AuthController {
     public validateToken = (req: Request, res: Response) => {
         
         res.json( 'validateToken' );
+    }
+
+
+
+
+    public deleteUsers = async(req: Request, res: Response) => {
+
+        try {
+
+            const users = await prisma.users.deleteMany();
+            if ( users.count == 0 ) return res.status(400).json({ error: 'Nothing to delete' });
+            
+            return res.status(200).json({ message: 'Users was deleted' });
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ error });
+        }
+
     }
 
 
