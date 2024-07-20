@@ -11,8 +11,8 @@ export class AuthRoutes {
         const authService = new AuthService();
         const authController = new AuthController(authService);
 
-        router.post('/login', authController.loginUser);
         router.post('/register', authController.registerUser);
+        router.post('/login', authController.loginUser);
 
         router.get('/validate-email/:token', authController.validateToken);
 

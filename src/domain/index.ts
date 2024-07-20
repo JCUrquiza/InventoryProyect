@@ -2,6 +2,7 @@
 // DTO´s
 // Auth
 export * from './dtos/auth/register-user.dto';
+export * from './dtos/auth/login-user.dto';
 
 // companies
 export * from './dtos/companies/create-company.dto';
