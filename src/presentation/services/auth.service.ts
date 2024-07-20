@@ -1,4 +1,4 @@
-import { bcryptAdapter } from '../../config';
+import { bcryptAdapter, JwtAdapter } from '../../config';
 import { prisma } from '../../data/postgres';
 import { CustomError, LoginUserDto, RegisterUserDto } from '../../domain';
 
@@ -18,7 +18,6 @@ export class AuthService {
         if ( existUser ) throw CustomError.badRequest('Email already exist');
 
         try {
-
             
             // Encriptar la contraseña
             const hashedPassword = bcryptAdapter.hash(registerUserDto.password);
@@ -57,12 +56,16 @@ export class AuthService {
         const isMatching = bcryptAdapter.compare(loginUserDto.password, userExist.password);
         if ( !isMatching ) throw CustomError.unauthorized('User not valid');
 
+        // Save on token
+        const token = await JwtAdapter.generateToken({ id: userExist.id });
+        if ( !token ) throw CustomError.internalServer('Error while creating jwt');
+
         const {password, ...rest} = userExist;
 
         // Retornar la info deo usuario
         return {
             user: rest,
-            token: 'ABC'
+            token
         };        
 
     }
