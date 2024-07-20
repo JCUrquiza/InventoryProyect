@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { BranchesOfficesController } from './controller';
+import { authMiddleware } from '../../middlewares/authMiddleware';
 
 
 export class BranchesOfficesRoutes {
@@ -13,7 +14,7 @@ export class BranchesOfficesRoutes {
         router.put('/update/:id', branchOffices.updateBranchOffice);
         router.get('/getAll', branchOffices.getAllBranchesSources);
         router.delete('/deleteAll', branchOffices.deleteBranchOffice);
-        router.delete('/delete/:id', branchOffices.deleteOneBranchOffice);
+        router.delete('/delete/:id', authMiddleware, branchOffices.deleteOneBranchOffice);
 
         return router;
     }

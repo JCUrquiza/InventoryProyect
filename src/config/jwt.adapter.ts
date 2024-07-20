@@ -17,10 +17,17 @@ export class JwtAdapter {
 
     }
 
-    static validateToken(token: string) {
+    static validateToken(token: string): Promise<any> {
 
-        throw new Error('Not implemented');
-        return;
+        return new Promise((resolve, reject) => {
+            jwt.verify(token, JWT_SEED, (err, decoded) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(decoded);
+            });
+        });
+        
     }
 
 }
