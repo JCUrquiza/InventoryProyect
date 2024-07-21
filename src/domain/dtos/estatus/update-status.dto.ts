@@ -1,5 +1,5 @@
 
-export class UpdateEstatusDto {
+export class UpdateStatusDto {
 
     constructor(
         public readonly id: number,
@@ -18,7 +18,7 @@ export class UpdateEstatusDto {
         return returnObj;
     }
 
-    static create( props: {[key: string]: any} ): [string?, UpdateEstatusDto?] {
+    static create( props: {[key: string]: any} ): [string?, UpdateStatusDto?] {
         const { id, name, code, color } = props;
 
         if ( !id || isNaN( Number(id) ) ) {
@@ -45,7 +45,7 @@ export class UpdateEstatusDto {
             newColor = colorCapitalized;
         }
 
-        return [undefined, new UpdateEstatusDto(id, newName, newCode, newColor)];
+        return [undefined, new UpdateStatusDto(id, newName, newCode, newColor)];
     }
 
 }

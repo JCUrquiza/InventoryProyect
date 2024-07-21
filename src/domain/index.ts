@@ -16,8 +16,8 @@ export * from './dtos/branchOffices/create-branchOffice.dto';
 export * from './dtos/branchOffices/update-branchOffice.dto';
 
 // Estatus
-export * from './dtos/estatus/create-estatus.dto';
-export * from './dtos/estatus/update-estatus.dto';
+export * from './dtos/estatus/create-status.dto';
+export * from './dtos/estatus/update-status.dto';
 
 // warehouses
 export * from './dtos/wareHouses/create-warehouses.dto';

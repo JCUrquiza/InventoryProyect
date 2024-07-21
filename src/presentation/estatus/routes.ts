@@ -1,17 +1,18 @@
 import { Router } from 'express';
-import { EstatusController } from './controller';
+import { StatusController } from './controller';
 
 
-export class EstatusRoutes {
+export class StatusRoutes {
 
     static get routes(): Router {
 
         const router = Router();
-        const estatusController = new EstatusController();
+        const statusController = new StatusController();
 
-        router.post('/create', estatusController.createEstatus);
-        router.put('/update/:id', estatusController.updateEstatus);
-        router.get('/getAll', estatusController.getAllStatus);
+        router.post('/create', statusController.createStatus);
+        router.put('/update/:id', statusController.updateStatus);
+        router.get('/getAll', statusController.getAllStatus);
+        router.delete('/deleteAll', statusController.deleteAll);
 
         return router;
     }

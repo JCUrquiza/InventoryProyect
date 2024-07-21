@@ -103,7 +103,7 @@ model productsInWarehouses {
   @@unique([warehousesByBranchId, productsId]) // Indice compuesto
 }
 
-model estatus {
+model status {
   id    Int    @id @default(autoincrement())
   name  String
   code  String
@@ -130,7 +130,7 @@ model tickets {
   catalogue   catalogue @relation(fields: [catalogueId], references: [id])
   catalogueId Int
 
-  estatus   estatus @relation(fields: [estatusId], references: [id])
+  status   status @relation(fields: [estatusId], references: [id])
   estatusId Int
 
   users users @relation(fields: [usersId], references: [id])

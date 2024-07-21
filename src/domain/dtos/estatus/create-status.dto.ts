@@ -1,5 +1,5 @@
 
-export class CreateEstatusDto {
+export class CreateStatusDto {
 
     constructor(
         public readonly name: string,
@@ -7,7 +7,7 @@ export class CreateEstatusDto {
         public readonly color: string,
     ) {}
 
-    static create( props: {[key: string]: any} ): [string?, CreateEstatusDto?] {
+    static create( props: {[key: string]: any} ): [string?, CreateStatusDto?] {
         const { name, code, color } = props;
 
         if ( !name ) return ['Miss name', undefined];
@@ -22,7 +22,7 @@ export class CreateEstatusDto {
         const colorTrimmed = color.trim();
         const colorCapitalized = colorTrimmed.charAt(0).toUpperCase() + colorTrimmed.slice(1).toLowerCase();
 
-        return [undefined, new CreateEstatusDto(nameCapitalized, codeCapitalized, colorCapitalized)];
+        return [undefined, new CreateStatusDto(nameCapitalized, codeCapitalized, colorCapitalized)];
     }
 
 }
