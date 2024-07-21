@@ -9,7 +9,8 @@ export class EstatusRoutes {
         const router = Router();
         const estatusController = new EstatusController();
 
-        // router.post('/create', company.createCompany);
+        router.post('/create', estatusController.createEstatus);
+        router.put('/update/:id', estatusController.updateEstatus);
 
         return router;
     }
