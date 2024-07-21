@@ -13,7 +13,7 @@ export class UpdateEstatusDto {
 
         if ( this.name ) returnObj.name = this.name;
         if ( this.code ) returnObj.code = this.code;
-        if ( this.color ) returnObj.color = this.code;
+        if ( this.color ) returnObj.color = this.color;
 
         return returnObj;
     }
@@ -26,14 +26,26 @@ export class UpdateEstatusDto {
         }
 
         // Capitalizar y recortar el nombre
-        const nameTrimmed = name.trim();
-        const nameCapitalized = nameTrimmed.charAt(0).toUpperCase() + nameTrimmed.slice(1).toLowerCase();
-        const codeTrimmed = code.trim();
-        const codeCapitalized = codeTrimmed.charAt(0).toUpperCase() + codeTrimmed.slice(1).toLowerCase();
-        const colorTrimmed = color.trim();
-        const colorCapitalized = colorTrimmed.charAt(0).toUpperCase() + colorTrimmed.slice(1).toLowerCase();
+        let newName = name;
+        let newCode = code;
+        let newColor = color;
+        if ( name !== undefined ) {
+            const nameTrimmed = name.trim();
+            const nameCapitalized = nameTrimmed.charAt(0).toUpperCase() + nameTrimmed.slice(1).toLowerCase();
+            newName = nameCapitalized;
+        }
+        if ( code !== undefined ) {
+            const codeTrimmed = code.trim();
+            const codeCapitalized = codeTrimmed.charAt(0).toUpperCase() + codeTrimmed.slice(1).toLowerCase();
+            newCode = codeCapitalized;
+        }
+        if ( color !== undefined ) {
+            const colorTrimmed = color.trim();
+            const colorCapitalized = colorTrimmed.charAt(0).toUpperCase() + colorTrimmed.slice(1).toLowerCase();
+            newColor = colorCapitalized;
+        }
 
-        return [undefined, new UpdateEstatusDto(id, nameCapitalized, codeCapitalized, colorCapitalized)];
+        return [undefined, new UpdateEstatusDto(id, newName, newCode, newColor)];
     }
 
 }

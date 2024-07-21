@@ -11,6 +11,7 @@ export class EstatusRoutes {
 
         router.post('/create', estatusController.createEstatus);
         router.put('/update/:id', estatusController.updateEstatus);
+        router.get('/getAll', estatusController.getAllStatus);
 
         return router;
     }

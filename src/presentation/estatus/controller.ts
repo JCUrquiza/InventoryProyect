@@ -43,14 +43,6 @@ export class EstatusController {
             const [error, updateEstatusDto] = UpdateEstatusDto.create({...req.body, id});
             if ( error ) return res.status(400).json({ error });
 
-            const estatusExist = await prisma.estatus.findFirst({
-                where: {
-                    name: updateEstatusDto!.name,
-                    code: updateEstatusDto!.code
-                }
-            });
-            if ( estatusExist ) return res.status(400).json({ error: 'That status already exist' });
-
             const updateEstatus = await prisma.estatus.update({
                 where: {
                     id: updateEstatusDto!.id
@@ -59,6 +51,22 @@ export class EstatusController {
             });
             
             return res.status(200).json({ statusUpdated: updateEstatus });
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ error });
+        }
+
+    }
+
+
+    public getAllStatus = async(req: Request, res: Response) => {
+
+        try {
+
+            const getAllStatus = await prisma.estatus.findMany();
+            if ( getAllStatus.length == 0 ) return res.status(404).json({ error: 'The status table are empty' });
+
+            return res.status(200).json({ status: getAllStatus });
         } catch (error) {
             console.log(error);
             return res.status(500).json({ error });
