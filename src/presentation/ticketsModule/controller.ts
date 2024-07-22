@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { CreateTicketDto } from '../../domain';
 import { prisma } from '../../data/postgres';
-import { connect } from 'http2';
 
 
 export class TicketsController {
@@ -51,10 +50,28 @@ export class TicketsController {
 
         try {
 
-            const allTickets = await prisma.tickets.findMany();
+            const allTickets = await prisma.tickets.findMany({
+                include: {
+                    catalogue: true,
+                    status: true,
+                    users: true,
+                }
+            });
             if ( allTickets.length == 0 ) return res.status(400).json({ error: 'Nothing to show' });
+
+            const response = allTickets.map( ticket => ({
+                id: ticket.id,
+                description: ticket.description,
+                date: ticket.date,
+                catalogue: ticket.catalogue,
+                status: ticket.status,
+                user: {
+                    id: ticket.users.id,
+                    name: ticket.users.name,        
+                }
+            }));
             
-            return res.status(200).json({ tickets: allTickets });
+            return res.status(200).json({ tickets: response });
         } catch (error) {
             console.log(error);
             return res.status(500).json({ error });
@@ -72,6 +89,57 @@ export class TicketsController {
             return res.status(200).json({ message: 'All tickets was deleted' })
         } catch (error) {
             console.log(error);
+            return res.status(500).json({ error });
+        }
+
+    }
+
+    public attendingTicket = async(req: Request, res: Response) => {
+
+        try {
+            
+            const id = +req.params.id;
+
+            const statusAttending = await prisma.status.findFirst({
+                where: {
+                    code: 'Atendo'
+                }
+            });
+            if ( !statusAttending ) return res.status(400).json({ error: 'status doesn´t exist'  });
+
+            const ticket = await prisma.tickets.update({
+                where: {
+                    id
+                },
+                data: {
+                    statusId: statusAttending.id
+                },
+                include: {
+                    catalogue: true,
+                    status: true,
+                    users: true,
+                }
+            });
+            if ( !ticket ) return res.status(400).json({ error: 'Ticket doesn´t exist' });
+
+            const response = {
+                id: ticket.id,
+                description: ticket.description,
+                date: ticket.date,
+                catalogue: ticket.catalogue,
+                status: ticket.status,
+                user: {
+                    id: ticket.users.id,
+                    name: ticket.users.name,        
+                }
+            }
+            
+            return res.status(200).json({ ticketUpdated: response });
+        } catch (error: any) {
+            console.log(error);
+            if ( error.code == 'P2025' ) {
+                return res.status(500).json({ error: error.meta.cause });
+            }
             return res.status(500).json({ error });
         }
 

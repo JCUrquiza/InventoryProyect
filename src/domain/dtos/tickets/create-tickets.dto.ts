@@ -7,7 +7,7 @@ export class CreateTicketDto {
     ) {}
 
     static create( props: {[key: string]: any}): [string?, CreateTicketDto?] {
-        const { description, catalogueId, userId } = props;
+        const { description, catalogueId } = props;
 
         if ( !description ) return ['Missing description', undefined];
         if ( !catalogueId ) return ['Missing catalogueId', undefined];

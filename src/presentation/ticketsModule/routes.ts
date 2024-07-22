@@ -13,6 +13,7 @@ export class TicketsRoutes {
         router.post('/create', authMiddleware, ticketsController.createTicket);
         router.get('/getAll', ticketsController.getAllTickets);
         router.delete('/deleteAll', ticketsController.deleteAllTickets);
+        router.get('/attending/:id', ticketsController.attendingTicket);
 
         return router;
     }
