@@ -130,11 +130,9 @@ model tickets {
   catalogue   catalogue @relation(fields: [catalogueId], references: [id])
   catalogueId Int
 
-  status   status @relation(fields: [estatusId], references: [id])
-  estatusId Int
+  status   status @relation(fields: [statusId], references: [id])
+  statusId Int
 
   users users @relation(fields: [usersId], references: [id])
   usersId Int
-
-  @@unique([estatusId, catalogueId]) // Indice compuesto
 }

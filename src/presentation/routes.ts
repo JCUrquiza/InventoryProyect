@@ -9,6 +9,7 @@ import { ProductsInWarehousesRoutes } from './productsInWarehouses/routes';
 import { AuthRoutes } from './auth/routes';
 import { CatalogueRoutes } from './catalogue/routes';
 import { StatusRoutes } from './estatus/routes';
+import { TicketsRoutes } from './ticketsModule/routes';
 
 
 export class AppRoutes {
@@ -29,7 +30,8 @@ export class AppRoutes {
 
         router.use('/api/v1/catalogue', CatalogueRoutes.routes);
         router.use('/api/v1/estatus', StatusRoutes.routes);
-        
+
+        router.use('/api/v1/tickets', TicketsRoutes.routes);
 
         return router;
     }
