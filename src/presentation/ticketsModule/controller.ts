@@ -100,9 +100,12 @@ export class TicketsController {
             
             const id = +req.params.id;
 
+            const statusCode = req.body.code;
+            if ( !statusCode ) return res.status(400).json({ error: 'Missing code' });
+
             const statusAttending = await prisma.status.findFirst({
                 where: {
-                    code: 'Atendo'
+                    code: statusCode
                 }
             });
             if ( !statusAttending ) return res.status(400).json({ error: 'status doesn´t exist'  });
