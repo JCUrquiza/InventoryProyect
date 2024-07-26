@@ -99,13 +99,27 @@ export class TicketsController {
         try {
             
             const id = +req.params.id;
+            const ticketDetails = await prisma.tickets.findUnique({
+                where: {
+                    id
+                },
+                include: {
+                    status: true
+                }
+            });
+            if ( !ticketDetails ) return res.status(400).json({ error: 'Ticket doesnt exist' });
+            const currentTicketState = ticketDetails.status.code;
 
-            const statusCode = req.body.code;
-            if ( !statusCode ) return res.status(400).json({ error: 'Missing code' });
+            let newState = '';
+            if ( currentTicketState == 'Penrev' ) {
+                newState = 'Atendo';
+            } else {
+                newState = 'Reslto';
+            }
 
             const statusAttending = await prisma.status.findFirst({
                 where: {
-                    code: statusCode
+                    code: newState
                 }
             });
             if ( !statusAttending ) return res.status(400).json({ error: 'status doesn´t exist'  });
