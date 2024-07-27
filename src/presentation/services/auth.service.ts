@@ -70,6 +70,34 @@ export class AuthService {
 
     }
 
+    public async validateToken(token: string) {
+
+        try {
+            const decoded = await JwtAdapter.validateToken(token);
+            if ( !decoded ) throw CustomError.unauthorized('Invalid token');
+
+            const userExist = await prisma.users.findFirst({
+                where: {
+                    id: decoded.id
+                }
+            });
+            if ( !userExist ) throw CustomError.notFound('User doesnt exist');
+            
+            const { password, ...rest } = userExist;
+            
+            const response = {
+                user: rest,
+                token
+            };
+
+            return response;
+        } catch (error) {
+            console.log(error);
+            throw CustomError.unauthorized(`${error}`);
+        }
+
+    }
+
 }
 
 

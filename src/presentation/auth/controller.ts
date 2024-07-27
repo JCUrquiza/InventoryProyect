@@ -43,11 +43,15 @@ export class AuthController {
 
 
     public validateToken = (req: Request, res: Response) => {
-        
-        res.json( 'validateToken' );
+
+        const token = req.headers.authorization?.split(' ')[1];
+        if ( !token ) return res.status(400).json({ error: 'Token not provided' });
+
+        this.authService.validateToken(token)
+            .then( user => res.json( user ) )
+            .catch( error => this.handleError(error, res) )
+
     }
-
-
 
 
     public deleteUsers = async(req: Request, res: Response) => {
