@@ -30,7 +30,7 @@ export class Server {
         this.app.use( cors({
             origin: 'http://localhost:4200',
             methods: ['GET', 'PUT', 'POST', 'DELETE'],
-            allowedHeaders: ['Content-Type'],
+            allowedHeaders: ['Content-Type', 'Authorization'],
             credentials: true
         }) );
 
