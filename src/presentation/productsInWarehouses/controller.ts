@@ -368,9 +368,7 @@ export class ProductInWarehousesController {
 
 
 
-
-
-    public deleteAllDataBase = async(req: Request, res: Response) => {
+    public destroyDataBase = async(req: Request, res: Response) => {
 
         try {
 

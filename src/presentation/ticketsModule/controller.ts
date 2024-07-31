@@ -25,8 +25,6 @@ export class TicketsController {
 
             // Obtener el ID del usuario del token
             const userId = req.user.id;
-            console.log(userId);
-            
             
             const newTicket = await prisma.tickets.create({
                 data: {

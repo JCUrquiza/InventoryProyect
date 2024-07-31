@@ -21,7 +21,9 @@ model users {
   password String
 
   // Relations
-  tickets tickets[]
+  tickets         tickets[]
+  firstDocuments  firstDocuments[]
+  secondDocuments secondDocuments[]
 }
 
 model company {
@@ -46,6 +48,7 @@ model branchOffices {
 
   // Relations
   warehousesByBranch warehousesByBranch[]
+  customers          customers[]
 }
 
 model wareHouses {
@@ -110,7 +113,10 @@ model status {
   color String
 
   // Relations
-  tickets tickets[]
+  tickets         tickets[]
+  customers       customers[]
+  firstDocuments  firstDocuments[]
+  secondDocuments secondDocuments[]
 }
 
 model catalogue {
@@ -119,7 +125,9 @@ model catalogue {
   module String
 
   // Relations
-  tickets tickets[]
+  tickets         tickets[]
+  firstDocuments  firstDocuments[]
+  secondDocuments secondDocuments[]
 }
 
 model tickets {
@@ -133,6 +141,74 @@ model tickets {
   status   status @relation(fields: [statusId], references: [id])
   statusId Int
 
-  users users @relation(fields: [usersId], references: [id])
+  users   users @relation(fields: [usersId], references: [id])
   usersId Int
 }
+
+model typeCustomer {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  // Relations
+  customers customers[]
+}
+
+model customers {
+  id              Int    @id @default(autoincrement())
+  name            String
+  apellidoPaterno String
+  apellidoMaterno String
+  email           String
+  address         String
+  telephone       String
+
+  typeCustomer   typeCustomer @relation(fields: [typeCustomerId], references: [id])
+  typeCustomerId Int
+
+  branchOffice   branchOffices @relation(fields: [branchOfficeId], references: [id])
+  branchOfficeId Int
+
+  status   status @relation(fields: [statusId], references: [id])
+  statusId Int
+
+  // Relations
+  firstDocuments  firstDocuments[]
+  secondDocuments secondDocuments[]
+}
+
+model firstDocuments {
+  id                Int      @id @default(autoincrement())
+  dateAutorizaition DateTime
+
+  customers  customers @relation(fields: [customerId], references: [id])
+  customerId Int
+
+  catalogue   catalogue @relation(fields: [catalogueId], references: [id])
+  catalogueId Int
+
+  users  users @relation(fields: [userId], references: [id])
+  userId Int
+
+  status   status @relation(fields: [statusId], references: [id])
+  statusId Int
+}
+
+model secondDocuments {
+  id               Int      @id @default(autoincrement())
+  dateAutorization DateTime
+
+  // Relations
+  customers  customers @relation(fields: [customerId], references: [id])
+  customerId Int
+
+  catalogue   catalogue @relation(fields: [catalogueId], references: [id])
+  catalogueId Int
+
+  users  users @relation(fields: [userId], references: [id])
+  userId Int
+
+  status   status @relation(fields: [statusId], references: [id])
+  statusId Int
+}
+
+

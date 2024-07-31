@@ -16,6 +16,8 @@ export class ProductsInWarehousesRoutes {
         router.delete('/delete/:id', authMiddleware, productInWarehouse.deleteProductInWarehouse);
         router.put('/transfer', productInWarehouse.moveProductBetweenWarehouses);
 
+        router.delete('/destroy', productInWarehouse.destroyDataBase);
+
         return router;
     }
 
