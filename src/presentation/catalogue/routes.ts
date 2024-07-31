@@ -11,6 +11,7 @@ export class CatalogueRoutes {
 
         router.post('/create', catalogueController.createCatalogue);
         router.get('/getAll', catalogueController.getAll);
+        router.put('/update/:id', catalogueController.updateCatalogue);
         router.delete('/deleteAll', catalogueController.deleteAll);
 
         return router;

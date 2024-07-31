@@ -24,12 +24,23 @@ export class UpdateCatalogueDto {
         }
 
         // Capitalizar y recortar el nombre
-        const nameTrimmed = name.trim();
-        const nameCapitalized = nameTrimmed.charAt(0).toUpperCase() + nameTrimmed.slice(1).toLowerCase();
-        const moduleTrimmed = module.trim();
-        const moduleCapitalized = moduleTrimmed.charAt(0).toUpperCase() + moduleTrimmed.slice(1).toLowerCase();
+        let nombre: string | undefined;
+        if (name !== undefined) {
+            const nameTrimmed = name.trim();
+            if (nameTrimmed.length > 0) {
+                nombre = nameTrimmed.charAt(0).toUpperCase() + nameTrimmed.slice(1).toLowerCase();
+            }
+        }
 
-        return [undefined, new UpdateCatalogueDto(id, nameCapitalized, moduleCapitalized)]
+        let moduleCapitalized: string | undefined;
+        if (module !== undefined) {
+            const moduleTrimmed = module.trim();
+            if (moduleTrimmed.length > 0) {
+                moduleCapitalized = moduleTrimmed.charAt(0).toUpperCase() + moduleTrimmed.slice(1).toLowerCase();
+            }
+        }
+
+        return [undefined, new UpdateCatalogueDto(id, nombre, moduleCapitalized)]
     }
 
 }

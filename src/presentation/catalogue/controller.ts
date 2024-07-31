@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { CreateCatalogueDto } from '../../domain';
+import { CreateCatalogueDto, UpdateCatalogueDto } from '../../domain';
 import { prisma } from '../../data/postgres';
 
 
@@ -34,8 +34,31 @@ export class CatalogueController {
 
     }
 
+    public updateCatalogue = async(req: Request, res: Response) => {
 
+        try {
+            const id = +req.params.id;
 
+            const [error, updateCatalogueDto] = UpdateCatalogueDto.create({...req.body, id});
+            if ( error ) return res.status(400).json({ error });
+
+            const catalogueUpdated = await prisma.catalogue.update({
+                where: {
+                    id
+                },
+                data: updateCatalogueDto!.values
+            });
+
+            return res.status(200).json({ catalogue: catalogueUpdated });
+        } catch (error: any) {
+            console.log(error);
+            if (error.code == 'P2025') {
+                return res.status(500).json({ error: error.meta.cause });
+            }
+            return res.status(500).json({ error });
+        }
+
+    }
 
     public getAll = async(req: Request, res: Response) => {
         const allConcepts = await prisma.catalogue.findMany();
