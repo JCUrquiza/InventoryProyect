@@ -10,6 +10,7 @@ import { AuthRoutes } from './auth/routes';
 import { CatalogueRoutes } from './catalogue/routes';
 import { StatusRoutes } from './estatus/routes';
 import { TicketsRoutes } from './ticketsModule/routes';
+import { customerRoutes } from './customers/routes';
 
 
 export class AppRoutes {
@@ -32,6 +33,8 @@ export class AppRoutes {
         router.use('/api/v1/estatus', StatusRoutes.routes);
 
         router.use('/api/v1/tickets', TicketsRoutes.routes);
+
+        router.use('/api/v1/customer', customerRoutes.routes);
 
         return router;
     }
