@@ -7,20 +7,21 @@ export class CreateCustomerDto {
         public readonly apellidoMaterno: string,
         public readonly email: string,
         public readonly address: string,
-        public readonly phone: string,
+        public readonly telephone: string,
         public readonly typeCustomerId: number,
         public readonly branchOfficeId: number,
+        public readonly statusId: number,
     ) {}
 
     static create( props: {[key: string]: any} ): [string?, CreateCustomerDto?] {
-        const { name, apellidoPaterno, apellidoMaterno, email, address, phone, typeCustomerId, branchOfficeId } = props;
+        const { name, apellidoPaterno, apellidoMaterno, email, address, telephone, typeCustomerId, branchOfficeId, statusId } = props;
 
         if ( !name ) return ['The name needs to be added', undefined];
         if ( !apellidoPaterno ) return ['The apellidoPaterno needs to be added', undefined];
         if ( !apellidoMaterno ) return ['The apellidoMaterno needs to be added', undefined];
         if ( !email ) return ['The email needs to be added', undefined];
         if ( !address ) return ['The address needs to be added', undefined];
-        if ( !phone ) return ['The phone needs to be added', undefined];
+        if ( !telephone ) return ['The telephone needs to be added', undefined];
         if ( !typeCustomerId ) return ['The typeCustomerId needs to be added', undefined];
         if ( !branchOfficeId ) return ['The branchOfficeId needs to be added', undefined];
 
@@ -40,9 +41,11 @@ export class CreateCustomerDto {
                 apellidoMaternoCapitalized,
                 email,
                 address,
-                phone,
+                telephone,
                 typeCustomerId,
-                branchOfficeId)
+                branchOfficeId,
+                statusId
+            )
         ];
     }
 
