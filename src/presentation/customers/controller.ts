@@ -39,6 +39,33 @@ export class CustomerController {
         return res.status(200).json({ typeCustomers: getAllTypeCustomers });
     }
 
+    public createCustomer = async(req: Request, res: Response) => {
+
+        try {
+            
+            
+
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ error });
+        }
+
+    }
+
+    public getAllCustomers = async(req: Request, res: Response) => {
+
+        try {
+
+            const getAllCustomers = await prisma.customers.findMany();
+            if ( getAllCustomers.length == 0 ) return res.status(400).json({ error: 'There are no clients to show' });
+
+            return res.status(200).json({ customers: getAllCustomers });
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ error });
+        }
+
+    }
 
 }
 
