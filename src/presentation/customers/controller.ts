@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { CreateTypeCustomerDto } from '../../domain/dtos/customers/create-type-customer.dto';
 import { prisma } from '../../data/postgres';
 import { CreateCustomerDto } from '../../domain/dtos/customers/create-customer.dto';
+import { UpdateCustomerDto } from '../../domain/dtos/customers/update-customer.dto';
 
 
 export class CustomerController {
@@ -90,6 +91,45 @@ export class CustomerController {
             if ( error.code == 'P2003' ) {
                 return res.status(500).json({ error: error.meta.field_name });
             }
+            return res.status(500).json({ error });
+        }
+
+    }
+
+    public updateCustomer = async(req: Request, res: Response) => {
+
+        try {
+            const id = +req.params.id;
+            const [error, updateCustomerDto] = UpdateCustomerDto.create({...req.body, id});
+            if ( error ) return res.status(400).json({ error });
+
+            const updateCustomer = await prisma.customers.update({
+                where: {
+                    id: updateCustomerDto!.id
+                },
+                data: updateCustomerDto!.values,
+                include: {
+                    typeCustomer: true,
+                    branchOffice: true,
+                    status: true
+                }
+            });
+
+            const response = {
+                id: updateCustomer.id,
+                name: updateCustomer.name,
+                fistName: updateCustomer.apellidoPaterno,
+                lastName: updateCustomer.apellidoMaterno,
+                email: updateCustomer.email,
+                address: updateCustomer.address,
+                typeCustomer: updateCustomer.typeCustomer,
+                branchOffice: updateCustomer.branchOffice,
+                status: updateCustomer.status,
+            }
+
+            return res.status(200).json({ updateCustomer: response });
+        } catch (error) {
+            console.log(error);
             return res.status(500).json({ error });
         }
 

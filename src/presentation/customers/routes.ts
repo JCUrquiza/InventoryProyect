@@ -13,6 +13,7 @@ export class customerRoutes {
         router.get('/getAll/type-customer', customersController.getAllTypeCustomers);
 
         router.post('/create/customer', customersController.createCustomer);
+        router.put('/update/customer/:id', customersController.updateCustomer);
         router.get('/getAll/customers', customersController.getAllCustomers);
         router.get('/get/customer/:id', customersController.getCustomerDetails);
 

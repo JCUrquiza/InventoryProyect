@@ -11,9 +11,9 @@ export class UpdateCompanyDto {
     get values() {
         const returnObj: {[key: string]: any} = {};
 
-        if ( this.name ) returnObj.name = this.name; 
-        if ( this.email ) returnObj.email = this.email; 
-        if ( this.address ) returnObj.address = this.address; 
+        if ( this.name ) returnObj.name = this.name;
+        if ( this.email ) returnObj.email = this.email;
+        if ( this.address ) returnObj.address = this.address;
 
         return returnObj;
     }
