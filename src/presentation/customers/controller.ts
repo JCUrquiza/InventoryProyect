@@ -129,6 +129,44 @@ export class CustomerController {
 
     }
 
+    public getCustomerDetails = async(req: Request, res: Response) => {
+
+        try {
+            const id = +req.params.id;
+            if ( !id ) return res.status(400).json({ error: 'Missing id' });
+            
+            const customerDetail = await prisma.customers.findUnique({
+                where: {
+                    id
+                },
+                include: {
+                    typeCustomer: true,
+                    branchOffice: true,
+                    status: true
+                }
+            });
+            if ( !customerDetail ) return res.status(404).json({ error: 'Customer doesnt found' });
+
+            const response = {
+                id: customerDetail.id,
+                name: customerDetail.name,
+                fistName: customerDetail.apellidoPaterno,
+                lastName: customerDetail.apellidoMaterno,
+                email: customerDetail.email,
+                address: customerDetail.address,
+                typeCustomer: customerDetail.typeCustomer,
+                branchOffice: customerDetail.branchOffice,
+                status: customerDetail.status,
+            }
+
+            return res.status(200).json({ customer: response });
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ error });
+        }
+
+    }
+
 }
 
 

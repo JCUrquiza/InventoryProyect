@@ -14,6 +14,7 @@ export class customerRoutes {
 
         router.post('/create/customer', customersController.createCustomer);
         router.get('/getAll/customers', customersController.getAllCustomers);
+        router.get('/get/customer/:id', customersController.getCustomerDetails);
 
         return router;
     }
