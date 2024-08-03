@@ -16,6 +16,7 @@ export class customerRoutes {
         router.put('/update/customer/:id', customersController.updateCustomer);
         router.get('/getAll/customers', customersController.getAllCustomers);
         router.get('/get/customer/:id', customersController.getCustomerDetails);
+        router.post('/update/status/customer', customersController.updateStatusOfCustomer);
 
         return router;
     }

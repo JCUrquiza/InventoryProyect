@@ -207,6 +207,48 @@ export class CustomerController {
 
     }
 
+    public updateStatusOfCustomer = async(req: Request, res: Response) => {
+
+        try {
+
+            const statusId = +req.body.statusId;
+            const customerId = +req.body.customerId;
+
+            if ( !statusId ) return res.status(400).json({ error: 'Missing statusId' });
+            if ( !customerId ) return res.status(400).json({ error: 'Missing customerId' });
+
+            const status = await prisma.status.findUnique({
+                where: {
+                    id: statusId
+                }
+            });
+            if ( !status ) return res.status(400).json({ error: 'Status doesnt exist' });
+            
+            const customer = await prisma.customers.findUnique({
+                where: {
+                    id: customerId
+                }
+            });
+            if ( !customer ) return res.status(500).json({ error: 'Customer doesnt exist' });
+
+            await prisma.customers.update({
+                where: {
+                    id: customer.id
+                },
+                data: {
+                    statusId : status.id
+                }
+            });
+            
+            return res.status(200).json({ message: 'Customer updated' });
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ error });
+        }
+
+    }
+
 }
+
 
 
