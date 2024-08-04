@@ -372,6 +372,9 @@ export class ProductInWarehousesController {
 
         try {
 
+            await prisma.tickets.deleteMany();
+            await prisma.users.deleteMany();
+            await prisma.customers.deleteMany();
             await prisma.productsInWarehouses.deleteMany();
             await prisma.warehousesByBranch.deleteMany();
             await prisma.wareHouses.deleteMany();

@@ -14,6 +14,33 @@ datasource db {
   url      = env("POSTGRES_URL")
 }
 
+model position {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  // Relations
+  users users[]
+}
+
+model functionality {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  // Relatons
+  actions actions[]
+}
+
+model actions {
+  id Int @id @default(autoincrement())
+
+  // Relations
+  users  users @relation(fields: [userId], references: [id])
+  userId Int
+
+  functionality   functionality @relation(fields: [functionalityId], references: [id])
+  functionalityId Int
+}
+
 model users {
   id       Int    @id @default(autoincrement())
   name     String
@@ -21,9 +48,14 @@ model users {
   password String
 
   // Relations
+  position   position @relation(fields: [positionId], references: [id])
+  positionId Int
+
+  // Relations
   tickets         tickets[]
   firstDocuments  firstDocuments[]
   secondDocuments secondDocuments[]
+  actions         actions[]
 }
 
 model company {
@@ -210,5 +242,6 @@ model secondDocuments {
   status   status @relation(fields: [statusId], references: [id])
   statusId Int
 }
+
 
 
