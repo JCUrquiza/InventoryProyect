@@ -20,6 +20,38 @@ export class AuthController {
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 
+
+
+    public createPositionUser = async(req: Request, res: Response) => {
+
+        try {
+            
+            const namePosition = req.body.name;
+            if ( !namePosition ) return res.status(400).json({ error: 'Missing name of position' });
+            
+            const positionExist = await prisma.position.findFirst({
+                where: {
+                    name: namePosition
+                }
+            });
+            if ( positionExist ) return res.status(400).json({ error: 'This position already exists, please try with other' });
+            
+            const newPosition = await prisma.position.create({
+                data: {
+                    name: namePosition  
+                }
+            });
+
+            return res.status(201).json({ position: newPosition });
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ error });
+        }
+
+    }
+
+
+
     public registerUser = (req: Request, res: Response) => {
 
         const [error, registerUserDto] = RegisterUserDto.create(req.body);
@@ -38,7 +70,7 @@ export class AuthController {
 
         this.authService.loginUser(loginUserDto!)
             .then( (user) => res.json(user) )
-            .catch( error => this.handleError(error, res) )
+            .catch( error => this.handleError(error, res) );
     }
 
 
@@ -49,8 +81,7 @@ export class AuthController {
 
         this.authService.validateToken(token)
             .then( user => res.json( user ) )
-            .catch( error => this.handleError(error, res) )
-
+            .catch( error => this.handleError(error, res) );
     }
 
 

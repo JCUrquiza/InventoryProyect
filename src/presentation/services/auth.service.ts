@@ -18,6 +18,13 @@ export class AuthService {
         if ( existUser ) throw CustomError.badRequest('Email already exist');
 
         try {
+
+            const position = await prisma.position.findFirst({
+                where: {
+                    name: 'SuperUser'
+                }
+            });
+            if ( !position ) throw CustomError.internalServer('There is no position to select, please add some position');
             
             // Encriptar la contraseña
             const hashedPassword = bcryptAdapter.hash(registerUserDto.password);
@@ -25,15 +32,29 @@ export class AuthService {
             const user = await prisma.users.create({
                 data: {
                     ...registerUserDto,
-                    password: hashedPassword
+                    password: hashedPassword,
+                    positionId: position.id
+                },
+                include: {
+                    position: true
                 }
             });
             
             // Generar JWT
+            const payload = {
+                id: user.id,
+                name: user.name,
+                position: {
+                    id: user.position.id,
+                    name: user.position.name
+                }
+            }
+            const token = await JwtAdapter.generateToken(payload);
+            if ( !token ) throw CustomError.internalServer('Error while creating jwt');
 
             return {
                 user,
-                token: 'ABC'
+                token: token
             };
         } catch (error) {
             throw CustomError.internalServer(`${error}`);
