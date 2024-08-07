@@ -118,11 +118,12 @@ model products {
   codigoSKU String
   salePrice Decimal
 
+  // Relations
   productFamily   productFamily @relation(fields: [productFamilyId], references: [id])
   productFamilyId Int
 
-  // Relations
   productsInWarehouses productsInWarehouses[]
+  productsInWorkOrder productsInWorkOrder[]
 }
 
 model productsInWarehouses {
@@ -149,6 +150,7 @@ model status {
   customers       customers[]
   firstDocuments  firstDocuments[]
   secondDocuments secondDocuments[]
+  workOrder workOrder[]
 }
 
 model catalogue {
@@ -206,6 +208,7 @@ model customers {
   // Relations
   firstDocuments  firstDocuments[]
   secondDocuments secondDocuments[]
+  workOrder workOrder[]
 }
 
 model firstDocuments {
@@ -242,6 +245,37 @@ model secondDocuments {
   status   status @relation(fields: [statusId], references: [id])
   statusId Int
 }
+
+model workOrder {
+  id Int @id @default(autoincrement())
+  address String
+  priceOfLabor Int
+  priceOfTransfer Int
+  priceTotal Int
+
+  // Relations
+  customers customers @relation(fields: [customerId], references: [id])
+  customerId Int
+
+  status status @relation(fields: [statusId], references: [id])
+  statusId Int
+
+  productsInWorkOrder productsInWorkOrder[]
+}
+
+model productsInWorkOrder {
+  id Int @id @default(autoincrement())
+  quantity Int
+
+  // Relations
+  workOrder workOrder @relation(fields: [workOrderId], references: [id])
+  workOrderId Int
+
+  products products @relation(fields: [productId], references: [id])
+  productId Int
+}
+
+
 
 
 

@@ -62,13 +62,15 @@ export class AuthService {
 
     }
 
-
     public async loginUser( loginUserDto: LoginUserDto ) {
 
         // Verificar que el usuario exista por correo
         const userExist = await prisma.users.findFirst({
             where: {
                 email: loginUserDto.email
+            },
+            include: {
+                position: true
             }
         });
         if ( !userExist ) throw CustomError.notFound('User doesn´t exist');
@@ -78,7 +80,15 @@ export class AuthService {
         if ( !isMatching ) throw CustomError.unauthorized('User not valid');
 
         // Save on token
-        const token = await JwtAdapter.generateToken({ id: userExist.id });
+        const payload = {
+            id: userExist.id,
+            name: userExist.name,
+            position: {
+                id: userExist.position.id,
+                name: userExist.position.name
+            }
+        }
+        const token = await JwtAdapter.generateToken(payload);
         if ( !token ) throw CustomError.internalServer('Error while creating jwt');
 
         const {password, ...rest} = userExist;
