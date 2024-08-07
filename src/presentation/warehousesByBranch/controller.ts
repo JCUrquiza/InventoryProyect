@@ -7,7 +7,6 @@ export class WarehousesByBranchController {
 
     constructor() {}
 
-
     public createAssociation = async(req: Request, res: Response) => {
 
         try {

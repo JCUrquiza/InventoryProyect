@@ -123,7 +123,7 @@ model products {
   productFamilyId Int
 
   productsInWarehouses productsInWarehouses[]
-  productsInWorkOrder productsInWorkOrder[]
+  productsInWorkOrder  productsInWorkOrder[]
 }
 
 model productsInWarehouses {
@@ -150,7 +150,7 @@ model status {
   customers       customers[]
   firstDocuments  firstDocuments[]
   secondDocuments secondDocuments[]
-  workOrder workOrder[]
+  workOrder       workOrder[]
 }
 
 model catalogue {
@@ -208,7 +208,7 @@ model customers {
   // Relations
   firstDocuments  firstDocuments[]
   secondDocuments secondDocuments[]
-  workOrder workOrder[]
+  workOrder       workOrder[]
 }
 
 model firstDocuments {
@@ -247,35 +247,30 @@ model secondDocuments {
 }
 
 model workOrder {
-  id Int @id @default(autoincrement())
-  address String
-  priceOfLabor Int
+  id              Int    @id @default(autoincrement())
+  address         String
+  priceOfLabor    Int
   priceOfTransfer Int
-  priceTotal Int
+  priceTotal      Int
 
   // Relations
-  customers customers @relation(fields: [customerId], references: [id])
+  customers  customers @relation(fields: [customerId], references: [id])
   customerId Int
 
-  status status @relation(fields: [statusId], references: [id])
+  status   status @relation(fields: [statusId], references: [id])
   statusId Int
 
   productsInWorkOrder productsInWorkOrder[]
 }
 
 model productsInWorkOrder {
-  id Int @id @default(autoincrement())
+  id       Int @id @default(autoincrement())
   quantity Int
 
   // Relations
-  workOrder workOrder @relation(fields: [workOrderId], references: [id])
+  workOrder   workOrder @relation(fields: [workOrderId], references: [id])
   workOrderId Int
 
-  products products @relation(fields: [productId], references: [id])
+  products  products @relation(fields: [productId], references: [id])
   productId Int
 }
-
-
-
-
-

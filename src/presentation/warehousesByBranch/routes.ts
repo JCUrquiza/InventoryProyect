@@ -3,7 +3,6 @@ import { WarehousesByBranchController } from "./controller";
 import { authMiddleware } from "../../middlewares/authMiddleware";
 
 
-
 export class WarehousesByBranchRoutes {
 
     static get routes(): Router {
