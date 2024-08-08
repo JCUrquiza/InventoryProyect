@@ -148,6 +148,57 @@ export class WorkOrderController {
 
     }
 
+    public listOfWorkOrders = async(req: Request, res: Response) => {
+
+        try {
+
+            const workOrder = await prisma.workOrder.findMany({
+                include: {
+                    customers: {
+                        include: {
+                            typeCustomer: true,
+                            branchOffice: true,
+                        }
+                    },
+                    status: true
+                }
+            });
+            if ( workOrder.length == 0 ) return res.status(400).json({ error: 'Theresnt work orders to show' });
+
+            const response = workOrder.map( workOrder => ({
+                id: workOrder.id,
+                address: workOrder.address,
+                priceTotal: workOrder.priceTotal,
+                customer: {
+                    id: workOrder.customers.id,
+                    name: workOrder.customers.name,
+                    apellidoPaterno: workOrder.customers.apellidoPaterno,
+                    apellidoMaterno: workOrder.customers.apellidoMaterno,
+                    typeCustomerId: {
+                        id: workOrder.customers.typeCustomer.id,
+                        name: workOrder.customers.typeCustomer.name,
+                    },
+                    branchOfficeId: {
+                        id: workOrder.customers.branchOffice.id,
+                        name: workOrder.customers.branchOffice.name
+                    }
+                },
+                statusId: {
+                    id: workOrder.status.id,
+                    name: workOrder.status.name,
+                    code: workOrder.status.code,
+                    color: workOrder.status.color
+                },
+            }));
+
+            return res.status(200).json({ workOrder: response });
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ error });
+        }
+
+    }
+
 }
 
 

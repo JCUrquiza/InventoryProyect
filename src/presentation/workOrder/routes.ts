@@ -10,6 +10,7 @@ export class WorkOrderRoutes {
         const workOrderController = new WorkOrderController();
 
         router.post('/create', workOrderController.createWorkOrder);
+        router.get('/getAll', workOrderController.listOfWorkOrders);
 
         return router;
     }
