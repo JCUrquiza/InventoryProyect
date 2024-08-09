@@ -199,6 +199,77 @@ export class WorkOrderController {
 
     }
 
+    public workOrderDetails = async(req: Request, res: Response) => {
+
+        try {
+
+            const id = +req.params.id;
+
+            const workOrder = await prisma.workOrder.findUnique({
+                where: {
+                    id
+                },
+                include: {
+                    customers: true,
+                    status: true,
+                    productsInWorkOrder: {
+                        include: {
+                            products: {
+                                include: {
+                                    productFamily: true
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            if ( !workOrder ) return res.status(400).json({ error: 'Work Order not exist' });
+
+            const products = workOrder.productsInWorkOrder.map( product => ({
+                id: product.id,
+                quantity: product.quantity,
+                product: {
+                    id: product.products.id,
+                    name: product.products.name,
+                    codigoSKU: product.products.codigoSKU,
+                    productFamily: {
+                        id: product.products.productFamily.id,
+                        name: product.products.productFamily.name
+                    }
+                }
+            }));
+
+            const response = {
+                id: workOrder.id,
+                address: workOrder.address,
+                priceOfLabor: workOrder.priceOfLabor,
+                priceOfTransfer: workOrder.priceOfTransfer,
+                priceTotal: workOrder.priceTotal,
+                customer: {
+                    id: workOrder.customers.id,
+                    apellidoPaterno: workOrder.customers.apellidoPaterno,
+                    apellidoMaterno: workOrder.customers.apellidoMaterno,
+                    email: workOrder.customers.email,
+                    address: workOrder.customers.address,
+                    telephone: workOrder.customers.telephone
+                },
+                status: {
+                    id: workOrder.status.id,
+                    name: workOrder.status.name,
+                    code: workOrder.status.code,
+                    color: workOrder.status.color
+                },
+                products: products
+            }
+
+            return res.status(200).json({ workOrder: response });
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ error });
+        }
+
+    }
+
 }
 
 

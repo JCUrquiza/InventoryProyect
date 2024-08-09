@@ -11,6 +11,7 @@ export class WorkOrderRoutes {
 
         router.post('/create', workOrderController.createWorkOrder);
         router.get('/getAll', workOrderController.listOfWorkOrders);
+        router.get('/detail/:id', workOrderController.workOrderDetails);
 
         return router;
     }
