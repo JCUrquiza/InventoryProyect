@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { CreateWorkOrderDto } from '../../domain/dtos/workOrder/create-workOrder.dto';
 import { prisma } from '../../data/postgres';
+import { UpdateWorkOrderStatus } from '../../domain/dtos/workOrder/update-status.dto';
 
 
 export class WorkOrderController {
@@ -263,6 +264,60 @@ export class WorkOrderController {
             }
 
             return res.status(200).json({ workOrder: response });
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ error });
+        }
+
+    }
+
+    public deleteAllWorkOrders = async(req: Request, res: Response) => {
+
+        try {
+            
+            await prisma.productsInWorkOrder.deleteMany();
+            await prisma.workOrder.deleteMany();
+
+            return res.status(200).json({ message: 'All workOrders was deleted succesfully' });
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ error });
+        }
+
+    }
+
+    public updateStatus = async(req: Request, res: Response) => {
+
+        try {
+            
+            const [error, updateWorkOrderStatus] = UpdateWorkOrderStatus.create(req.body);
+            if ( error ) return res.status(400).json({ error });
+
+            // Buscamos la orden dde trabajo
+            const workOrderExist = await prisma.workOrder.findUnique({
+                where: {
+                    id: updateWorkOrderStatus!.id
+                }
+            });
+            if ( !workOrderExist ) return res.status(404).json({ error: 'workOrder not found' });
+
+            const statusExist = await prisma.status.findFirst({
+                where: {
+                    code: updateWorkOrderStatus!.codeStatus
+                }
+            });
+            if ( !statusExist ) return res.status(404).json({ error: 'statusCode doesnt exists' });
+
+            await prisma.workOrder.update({
+                where: {
+                    id: updateWorkOrderStatus!.id
+                },
+                data: {
+                    statusId: statusExist.id
+                }
+            });
+
+            return res.status(200).json({ message: 'WorkOrder updated sucessfully' })
         } catch (error) {
             console.log(error);
             return res.status(500).json({ error });

@@ -15,9 +15,8 @@ export class AuthRoutes {
 
         router.post('/register', authController.registerUser);
         router.post('/login', authController.loginUser);
-
         router.get('/validate-token', authController.validateToken);
-
+        router.get('/getAll', authController.getAllUsers);
         router.delete('/deleteAll', authController.deleteUsers);
 
         return router;

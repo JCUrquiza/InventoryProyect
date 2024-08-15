@@ -10,7 +10,6 @@ export class AuthController {
         public readonly authService: AuthService
     ) {}
 
-
     private handleError = (error: unknown, res: Response) => {
         if ( error instanceof CustomError ) {
             return res.status(error.statusCode).json({ error: error.message });
@@ -19,8 +18,6 @@ export class AuthController {
         console.log(error);
         return res.status(500).json({ error: 'Internal Server Error' });
     }
-
-
 
     public createPositionUser = async(req: Request, res: Response) => {
 
@@ -50,8 +47,6 @@ export class AuthController {
 
     }
 
-
-
     public registerUser = (req: Request, res: Response) => {
 
         const [error, registerUserDto] = RegisterUserDto.create(req.body);
@@ -61,7 +56,6 @@ export class AuthController {
             .then( (user) => res.json(user) )
             .catch( error => this.handleError(error, res) );
     }
-
 
     public loginUser = (req: Request, res: Response) => {
 
@@ -73,7 +67,6 @@ export class AuthController {
             .catch( error => this.handleError(error, res) );
     }
 
-
     public validateToken = (req: Request, res: Response) => {
 
         const token = req.headers.authorization?.split(' ')[1];
@@ -84,6 +77,20 @@ export class AuthController {
             .catch( error => this.handleError(error, res) );
     }
 
+    public getAllUsers = async(req: Request, res: Response) => {
+
+        try {
+
+            const getAllUsers = await prisma.users.findMany();
+            if ( getAllUsers.length == 0 ) return res.status(404).json({ error: 'users table is empty' });
+            
+            return res.status(200).json({ users: getAllUsers });
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ error });
+        }
+
+    }
 
     public deleteUsers = async(req: Request, res: Response) => {
 
@@ -100,8 +107,6 @@ export class AuthController {
 
     }
 
-
 }
-
 
 
