@@ -52,7 +52,7 @@ export class WorkOrderController {
 
                 await prisma.productsInWorkOrder.create({
                     data: {
-                        quantity: listProduct.quantity,
+                        quantity: +listProduct.quantity,
                         workOrderId: newWorkOrder.id,
                         productId: product!.id
                     }
@@ -175,16 +175,16 @@ export class WorkOrderController {
                     name: workOrder.customers.name,
                     apellidoPaterno: workOrder.customers.apellidoPaterno,
                     apellidoMaterno: workOrder.customers.apellidoMaterno,
-                    typeCustomerId: {
+                    typeCustomer: {
                         id: workOrder.customers.typeCustomer.id,
                         name: workOrder.customers.typeCustomer.name,
                     },
-                    branchOfficeId: {
+                    branchOffice: {
                         id: workOrder.customers.branchOffice.id,
                         name: workOrder.customers.branchOffice.name
                     }
                 },
-                statusId: {
+                status: {
                     id: workOrder.status.id,
                     name: workOrder.status.name,
                     code: workOrder.status.code,
